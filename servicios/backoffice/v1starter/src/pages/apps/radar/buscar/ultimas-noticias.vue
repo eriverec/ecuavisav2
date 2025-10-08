@@ -117,7 +117,19 @@ function agruparPorAtributo(data, atributo) {
 }
 
 function limpiarEspacios(texto) {
-    return texto.replace(/\s*,\s*/g, ',');
+    try {
+      if(typeof texto !== "string" && (!Array.isArray(texto) && typeof texto !== "object")){
+        return "";
+      }
+
+      if(Array.isArray(texto)){
+        return texto.map(e => limpiarEspacios(e));
+      }
+
+      return texto.replace(/\s*,\s*/g, ',')?.toUpperCase();
+    } catch (error) {
+      return "";
+    }
 }
 
 function extraerPaths(url) {
@@ -223,8 +235,8 @@ const principalData = async function () {
             noticia.vertical = noticia.seccion;
             noticia.subVertical = noticia.subseccion;
             if(noticia.keywords){
-              noticia.keywords = limpiarEspacios(noticia.keywords.toUpperCase());
-              noticia.tags = limpiarEspacios(noticia.tags.toUpperCase());
+              noticia.keywords = limpiarEspacios(noticia.keywords);
+              noticia.tags = limpiarEspacios(noticia.tags);
             }
 
             if(noticia.url_communication){
@@ -627,7 +639,7 @@ function procesarKeywordsAndTags(articles){
 ******* FIN FILTRO pastelWordCloud
 */
 
-onMounted(async () => {
+async function initModulo(){
   await principalData();
   await loadSiteNames();
 
@@ -635,6 +647,17 @@ onMounted(async () => {
   itemsSitioWebSubSeccion.value = getUniqueSubVerticals(dataAll.value);
 
   procesarKeywordsAndTags(dataAll.value);
+}
+
+onMounted(async () => {
+  // await principalData();
+  // await loadSiteNames();
+
+  // itemsSitioWebSeccion.value = getUniqueVerticals(dataAll.value);
+  // itemsSitioWebSubSeccion.value = getUniqueSubVerticals(dataAll.value);
+
+  // procesarKeywordsAndTags(dataAll.value);
+  await initModulo();
 });
 
 </script>
@@ -663,7 +686,7 @@ onMounted(async () => {
                     </VChip>
                   </div>
                   <div class="content-btn mt-3">
-                    <VBtn :loading="loadingData" title="Recargar datos" @click="principalData" target="_blank"
+                    <VBtn :loading="loadingData" title="Recargar datos" @click="initModulo" target="_blank"
                       color="primary" variant="tonal" size="small">
                       <VIcon icon="tabler-reload" /> Recargar datos
                     </VBtn>

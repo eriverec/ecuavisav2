@@ -117,7 +117,19 @@ function agruparPorAtributo(data, atributo) {
 }
 
 function limpiarEspacios(texto) {
-    return texto.replace(/\s*,\s*/g, ',');
+    try {
+      if(typeof texto !== "string" && (!Array.isArray(texto) && typeof texto !== "object")){
+        return "";
+      }
+
+      if(Array.isArray(texto)){
+        return texto.map(e => limpiarEspacios(e));
+      }
+      
+      return texto.replace(/\s*,\s*/g, ',')?.toUpperCase();
+    } catch (error) {
+      return "";
+    }
 }
 
 function extraerPaths(url) {
@@ -233,8 +245,8 @@ const principalData = async function () {
               let {keywords = "", tags = ""} = noticia;
               keywords = normalize(keywords);
               tags = normalize(tags);
-              noticia.keywords = limpiarEspacios(keywords.toUpperCase());
-              noticia.tags = limpiarEspacios(tags.toUpperCase());
+              noticia.keywords = limpiarEspacios(keywords);
+              noticia.tags = limpiarEspacios(tags);
             }
 
             if(noticia.url_communication){
@@ -619,7 +631,7 @@ function procesarKeywordsAndTags(articles){
 ******* FIN FILTRO pastelWordCloud
 */
 
-onMounted(async () => {
+async function initModulo(){
   await principalData();
   await loadSiteNames();
 
@@ -627,6 +639,10 @@ onMounted(async () => {
   itemsSitioWebSubSeccion.value = getUniqueSubVerticals(dataAll.value);
 
   procesarKeywordsAndTags(dataAll.value);
+}
+
+onMounted(async () => {
+  await initModulo();
   obtenerHora();
 });
 
@@ -634,7 +650,8 @@ function obtenerHora() {
   // Espera 2 minutos (300,000 ms) y luego ejecuta la función deseada
   setTimeout(() => {
     console.log("Han pasado 2 minutos. Ejecutando función...");
-    principalData(); // Llama a la función deseada
+    // principalData(); // Llama a la función deseada
+    initModulo()
     // window.location.reload(); // Si deseas recargar la página
   }, (1000 * 60 * 2));
 }
@@ -665,7 +682,7 @@ function obtenerHora() {
                     </VChip>
                   </div>
                   <div class="content-btn mt-3">
-                    <VBtn :loading="loadingData" title="Recargar datos" @click="principalData" target="_blank"
+                    <VBtn :loading="loadingData" title="Recargar datos" @click="initModulo" target="_blank"
                       color="primary" variant="tonal" size="small">
                       <VIcon icon="tabler-reload" /> Recargar datos
                     </VBtn>
@@ -689,6 +706,9 @@ function obtenerHora() {
     <VRow>
       <VCol cols="12" md="12" lg="12">
         <datos_bar_vertical_noticias_por_hora :articulos="dataAll" :disabledAll="false" :height="310" />
+      </VCol>
+      <VCol cols="12" sm="12" lg="12">
+        <pastelWordCloud v-if="topKeywords.length > 0" :limitKeywords="75" :data="allKeywords" :dataTags="allTags" :dataListArticles="dataAll" />
       </VCol>
     </VRow>
     <VRow class="d-none">

@@ -117,7 +117,19 @@ function agruparPorAtributo(data, atributo) {
 }
 
 function limpiarEspacios(texto) {
-    return texto.replace(/\s*,\s*/g, ',');
+    try {
+      if(typeof texto !== "string" && (!Array.isArray(texto) && typeof texto !== "object")){
+        return "";
+      }
+
+      if(Array.isArray(texto)){
+        return texto.map(e => limpiarEspacios(e));
+      }
+      
+      return texto.replace(/\s*,\s*/g, ',')?.toUpperCase();
+    } catch (error) {
+      return "";
+    }
 }
 
 function extraerPaths(url) {
@@ -233,8 +245,8 @@ const principalData = async function () {
               let {keywords = "", tags = ""} = noticia;
               keywords = normalize(keywords);
               tags = normalize(tags);
-              noticia.keywords = limpiarEspacios(keywords.toUpperCase());
-              noticia.tags = limpiarEspacios(tags.toUpperCase());
+              noticia.keywords = limpiarEspacios(keywords);
+              noticia.tags = limpiarEspacios(tags);
             }
 
             if(noticia.url_communication){
