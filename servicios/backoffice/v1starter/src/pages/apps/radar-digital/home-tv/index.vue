@@ -1,5 +1,5 @@
 <script setup>
-import datos_bar_vertical_noticias_por_hora from '@/views/apps/radar/v2/datos_bar_vertical_noticias_por_hora.vue';
+import datos_bar_vertical_noticias_por_hora from '@/views/apps/radar/v2/home-tv/datos_bar_vertical_noticias_por_hora.vue';
 import plantilla_articulos_estilo_principal from '@/views/apps/radar/v2/home-tv/plantilla_articulos_estilo_principal.vue';
 // import ApexChartPasteTotalDia from '@/views/apps/radar/pastel-ultimas-noticias-total-diav2.vue';
 // import ApexChartExpenseRatio from '@/views/apps/radar/pastel-ultimas-noticiasv2.vue';

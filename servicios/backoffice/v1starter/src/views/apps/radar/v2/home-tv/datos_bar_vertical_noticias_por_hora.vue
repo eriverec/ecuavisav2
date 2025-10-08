@@ -1,5 +1,4 @@
 <script setup>
-  import plantilla_articulos_estilo_principal from '@/views/apps/radar/v2/plantilla_articulos_estilo_principal.vue';
   import VueApexCharts from 'vue3-apexcharts';
   import { hexToRgb } from '@layouts/utils';
   import { useTheme } from 'vuetify';
@@ -407,9 +406,7 @@
       <VCardText style="max-height: 450px;">
         <VList lines="two" class="py-4">
           <div v-if="filteredDataModalChart1.length">
-            <VListItem class="py-0">
-              <plantilla_articulos_estilo_principal :modoSimple="true" :articulos="filteredDataModalChart1" :filtrosActivos="filtrosActivos" />
-            </VListItem>
+            
           </div>
           <div v-else>
             <td colspan="4" class="no-results">No se encontraron resultados</td>
@@ -465,7 +462,6 @@
             :height="props.height * 1"
             :options="resolveData.options"
             :series="resolveData.series"
-            @click="eventClick"
           />
 
           <div class="d-flex gap-2 mt-0 flex-column pb-3" v-if="props.disabledAll">

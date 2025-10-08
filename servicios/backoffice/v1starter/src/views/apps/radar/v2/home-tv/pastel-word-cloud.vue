@@ -1,5 +1,4 @@
 <script setup>
-import plantilla_articulos_estilo_principal from '@/views/apps/radar/v2/home-tv/plantilla_articulos_estilo_principal.vue';
 import { onMounted, onUnmounted, ref } from "vue";
 import * as d3 from "d3";
 import cloud from "d3-cloud";
@@ -116,7 +115,7 @@ import esLocale from "moment/locale/es";
 
           .on("click", (event, d) => {
             // alert(`Palabra seleccionada: ${d.text}`)
-            clickKeyword(d.text);
+            // clickKeyword(d.text);
         });
       })
       .start();
@@ -534,9 +533,7 @@ import esLocale from "moment/locale/es";
         <VCardText style="max-height: 450px;">
           <VList lines="two" class="py-4">
             <div v-if="filteredDataModalChart1.length">
-              <VListItem class="py-0">
-                <plantilla_articulos_estilo_principal :modoSimple="true" :articulos="filteredDataModalChart1" :filtrosActivos="filtrosActivos" />
-              </VListItem>
+              
             </div>
             <div v-else>
               <td colspan="4" class="no-results">No se encontraron resultados</td>
