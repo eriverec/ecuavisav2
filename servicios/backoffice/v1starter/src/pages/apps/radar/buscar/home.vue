@@ -1,13 +1,21 @@
 <script setup>
-import datos_bar_vertical_noticias_por_hora from '@/views/apps/radar/v2/datos_bar_vertical_noticias_por_hora.vue';
-import plantilla_articulos_estilo_principal from '@/views/apps/radar/v2/plantilla_articulos_estilo_principal.vue';
+import datos_bar_vertical_noticias_por_hora from '@/views/apps/radar/v2/datos_bar_vertical_noticias_por_hora-v2-home.vue';
+import plantilla_articulos_estilo_principal from '@/views/apps/radar/v2/plantilla_articulos_estilo_principal-v2-home.vue';
+// import { useAppConfigStore } from '@core/stores/appConfig'
+// // Instancia del store de configuración
+// const appConfig = useAppConfigStore()
+// appConfig.isVerticalNavCollapsed = true
 // import ApexChartPasteTotalDia from '@/views/apps/radar/pastel-ultimas-noticias-total-diav2.vue';
 // import ApexChartExpenseRatio from '@/views/apps/radar/pastel-ultimas-noticiasv2.vue';
-import pastelWordCloud from '@/views/apps/radar/v2/pastel-word-cloud.vue';
+import pastelWordCloud from '@/views/apps/radar/v2/pastel-word-cloud-v2-home.vue';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
 import { computed, onMounted, reactive, ref, watch } from 'vue';
+import {
+  injectionKeyIsVerticalNavHovered,
+  useLayouts,
+} from '@layouts'
 
 const moment = extendMoment(Moment);
 moment.locale('es', [esLocale]);
@@ -26,6 +34,13 @@ const filtrosActivos = reactive({
   subseccion: [],
   disabled: false
 });
+
+const {
+  isVerticalNavCollapsed: isCollapsed,
+  isLessThanOverlayNavBreakpoint,
+  isVerticalNavMini,
+  isAppRtl,
+} = useLayouts()
 
 const lastUpdate = ref({
   fechai: moment().startOf('day').format("YYYY-MM-DD HH:mm"),
@@ -644,6 +659,12 @@ async function initModulo(){
 onMounted(async () => {
   await initModulo();
   obtenerHora();
+  isCollapsed.value = true;
+  const elemento = document.getElementById('content-padre')
+  if (elemento) {
+    const y = elemento.getBoundingClientRect().top + window.scrollY - 80 // 👈 resta 20px
+    window.scrollTo({ top: y, behavior: 'smooth' })
+  }
 });
 
 function obtenerHora() {
@@ -653,7 +674,7 @@ function obtenerHora() {
     // principalData(); // Llama a la función deseada
     initModulo()
     // window.location.reload(); // Si deseas recargar la página
-  }, (1000 * 60 * 2));
+  }, (1000 * 60 * 5)); // 5min
 }
 
 </script>
@@ -670,7 +691,7 @@ function obtenerHora() {
     <VRow>
       <VCol cols="12" md="12" lg="12">
         <VCard>
-          <VCardItem>
+          <VCardItem class="py-2 px-2">
             <div class="d-flex content-title flex-wrap w-100">
               <div class="d-flex gap-3 justify-space-between w-100">
                 <div class="d-flex flex-column" style="line-height: 1.3;">
@@ -681,7 +702,7 @@ function obtenerHora() {
                       {{ dataAll.length }} Artículo(s).
                     </VChip>
                   </div>
-                  <div class="content-btn mt-3">
+                  <div class="content-btn mt-3 d-none">
                     <VBtn :loading="loadingData" title="Recargar datos" @click="initModulo" target="_blank"
                       color="primary" variant="tonal" size="small">
                       <VIcon icon="tabler-reload" /> Recargar datos
@@ -703,12 +724,19 @@ function obtenerHora() {
       </VCol>
     </VRow>
     
-    <VRow>
-      <VCol cols="12" md="12" lg="12">
-        <datos_bar_vertical_noticias_por_hora :articulos="dataAll" :disabledAll="false" :height="310" />
+    <VRow id="content-padre">
+      <VCol cols="12" md="5" lg="5">
+        <VRow>
+          <VCol cols="12" sm="12" lg="12">
+            <pastelWordCloud v-if="topKeywords.length > 0" :limitKeywords="125" :data="allKeywords" :dataTags="allTags" :dataListArticles="dataAll" />
+          </VCol>
+          <VCol cols="12" md="12" lg="12">
+            <datos_bar_vertical_noticias_por_hora :articulos="dataAll" :disabledAll="false" :height="310" />
+          </VCol>
+        </VRow>
       </VCol>
-      <VCol cols="12" sm="12" lg="12">
-        <pastelWordCloud v-if="topKeywords.length > 0" :limitKeywords="75" :data="allKeywords" :dataTags="allTags" :dataListArticles="dataAll" />
+      <VCol cols="12" md="7" lg="7">
+        <plantilla_articulos_estilo_principal :articulos="filteredData" :filtrosActivos="filtrosActivos" :modoSimple="true" />
       </VCol>
     </VRow>
     <VRow class="d-none">
@@ -763,15 +791,19 @@ function obtenerHora() {
         </VCard>
       </VCol>
     </VRow>
-    <VRow>
-      <VCol cols="12" md="12" lg="12">
-        <plantilla_articulos_estilo_principal :articulos="filteredData" :filtrosActivos="filtrosActivos" />
-      </VCol>
-    </VRow>
   </section>
 </template>
-<style scoped>
+<style>
   .title-principal{
     font-size: 25px;
   }
+
+  .layout-content-width-boxed.layout-wrapper.layout-nav-type-vertical .layout-navbar,
+  .layout-content-width-boxed .layout-page-content {
+      width: 100%!important;
+      max-width: 100%!important;
+      max-inline-size: 100%!important;
+  }
+  
+
 </style>
