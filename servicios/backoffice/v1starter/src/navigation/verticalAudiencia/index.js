@@ -73,8 +73,8 @@ export default [
     title: 'Radar Digital',
     icon: { icon: 'tabler-radar' },
     children: [
-      { title: 'Dashboard', to: 'apps-radar-buscar-home' },
-      { title: 'Últimas noticias', to: 'apps-radar-buscar-ultimas-noticias' },
+      { title: 'Dashboard TV', to: 'apps-radar-digital-home-tv' },
+      { title: 'Últimas noticias', to: 'apps-radar-digital' },
       { title: 'Histórico', to: 'apps-radar-buscar-historico' },
       { title: 'Configuración', to: 'apps-radar-buscar-pro' },
       // { title: 'Dashboard', to: 'apps-radar-home' },

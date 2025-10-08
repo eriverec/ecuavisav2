@@ -424,7 +424,7 @@
   <VRow>
     <VCol cols="12" md="12" :class="isLoading?'disabled':''">
       <VCard :class="props.disabledAll ? 'elevation-0 border rounded no-truncate' : ''">
-        <VCardItem class="header_card_item" v-if="!props.disabledAll">
+        <VCardItem class="header_card_item px-2 py-2" v-if="!props.disabledAll">
           <div class="d-flex">
             <div class="descripcion">
               <VCardTitle>Artículos: {{model_select_hora.title}}</VCardTitle>
@@ -446,12 +446,6 @@
               return-object 
             />
           </template>
-        </VCardItem>
-
-        <VCardItem class="pt-0">
-          <div class="bg-ecuavisa py-2">
-            
-          </div>
         </VCardItem>
 
         <VCardText>

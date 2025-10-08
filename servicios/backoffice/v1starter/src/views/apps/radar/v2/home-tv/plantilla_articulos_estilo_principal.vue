@@ -239,7 +239,7 @@
     };
   }
 
-  const model_select_hora = ref({ title:"Todos", value: ""  });
+  const model_select_hora = ref({ title:"Hoy", value: moment().startOf('day')  });
 
   const items_select_hora = ref([
     { title:"Todos", value: ""  },
@@ -272,7 +272,7 @@
       isLoading.value = true;
       filteredData.value = props.articulos;
       procesarKeywordsAndTags(filteredData.value);
-      model_select_hora.value = { title:"Todos", value: ""  };
+      model_select_hora.value = { title:"Hoy", value: moment().startOf('day')  };
       isLoading.value = false;
       currentPage.value = 1;
     }
@@ -282,7 +282,7 @@
     isLoading.value = true;
     filteredData.value = props.articulos;
     procesarKeywordsAndTags(filteredData.value);
-    model_select_hora.value = { title:"Todos", value: ""  };
+    model_select_hora.value = { title:"Hoy", value: moment().startOf('day')  };
     isLoading.value = false;
   });
 
@@ -544,7 +544,6 @@ function procesarKeywordsAndTags(articles){
             </div>
             <div class="pt-2 d-flex gap-2 align-start">
               <VSelect 
-                 v-if="!props.modoSimple"
                 style="min-width: 150px;"
                 label="Filtrar por hora"
                 v-model="model_select_hora"
@@ -627,7 +626,7 @@ function procesarKeywordsAndTags(articles){
                     <div class="d-flex justify-space-between align-center gap-2">
                       <h4 class="article-title mb-0">{{ item.titulo }}</h4>
                       <VBtn :href="item.enlace" target="_blank" variant="tonal" size="x-small"
-                        class=" ml-2 flex-shrink-0 botoncito">
+                        class=" ml-2 flex-shrink-0 botoncito d-none">
                         <VIcon icon="tabler-external-link" size="16" />
                         <label v-if="!props.modoSimple">
                           Ver artículo
@@ -708,7 +707,7 @@ function procesarKeywordsAndTags(articles){
 }
 
 .article-title {
-  font-size: 0.95rem;
+  font-size: 1.15rem;
   line-height: 1.3;
   margin: 0;
   overflow: hidden;

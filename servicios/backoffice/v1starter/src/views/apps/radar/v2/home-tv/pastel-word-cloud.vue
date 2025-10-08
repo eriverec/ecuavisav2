@@ -20,7 +20,7 @@ import esLocale from "moment/locale/es";
   const keywordsAndArticles = ref([]);
   const words = ref([]);
   const width = ref(window.innerWidth * 0.53);  // 90% del ancho de pantalla
-  const height = ref(window.innerHeight * 0.63); // 50% de la altura de pantalla
+  const height = ref(window.innerHeight * 0.53); // 50% de la altura de pantalla
   const limitKeywords = ref(15);
   let updateTimeout = null; // Variable para manejar el debounce
 
@@ -324,7 +324,7 @@ import esLocale from "moment/locale/es";
     return true;
   }
 
-  const model_select_hora = ref({ title:"Todos", value:""  });
+  const model_select_hora = ref({ title:"Hoy", value: moment().startOf('day')  });
   const items_select_hora = ref([
     { title:"Todos", value: ""  },
     { title:"Hoy", value: moment().startOf('day')  },
@@ -474,7 +474,7 @@ import esLocale from "moment/locale/es";
   
   watch(() => props.data, ()=>{
     keywordsAndArticles.value = props.data;
-    model_select_hora.value = { title:"Todos", value:""  };
+    model_select_hora.value = { title:"Hoy", value: moment().startOf('day')  };
   });
   // watch(() => props.dataTags, debounceUpdate, { deep: true });
 
@@ -484,7 +484,7 @@ import esLocale from "moment/locale/es";
     }
 
     keywordsAndArticles.value = props.data;
-    model_select_hora.value = { title:"Todos", value:""  };
+    model_select_hora.value = { title:"Hoy", value: moment().startOf('day')  };
 
     // console.log("keywordsAndArticles.value", keywordsAndArticles.value.splice(0, 5))
     // console.log("props.dataListArticles", props.dataListArticles)
