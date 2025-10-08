@@ -69,15 +69,15 @@ export default defineConfig(({ mode }) => {
       },
     },
     build: {
+      minify: 'terser',
       terserOptions: {
         compress: {
-          drop_console: true, // Elimina console.log para reducir tamaño
-          drop_debugger: true
-        }
+          drop_console: true,
+          drop_debugger: true,
+        },
       },
-      ssrEmitAssets: true,
-      chunkSizeWarningLimit: 15000
-    },
+      chunkSizeWarningLimit: 15000,
+    },    
     optimizeDeps: {
       exclude: ['vuetify'],
       entries: [

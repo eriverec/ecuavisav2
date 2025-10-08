@@ -1,5 +1,5 @@
 <script setup>
-  import plantilla_articulos_estilo_principal from '@/views/apps/radar/v2/plantilla_articulos_estilo_principal.vue';
+  import plantilla_articulos_estilo_principal_v2_home from '@/views/apps/radar/v2/plantilla_articulos_estilo_principal_v2_home.vue';
   import VueApexCharts from 'vue3-apexcharts';
   import { hexToRgb } from '@layouts/utils';
   import { useTheme } from 'vuetify';
@@ -411,7 +411,7 @@
         <VList lines="two" class="py-4">
           <div v-if="filteredDataModalChart1.length">
             <VListItem class="py-0">
-              <plantilla_articulos_estilo_principal :modoSimple="true" :articulos="filteredDataModalChart1" :filtrosActivos="filtrosActivos" />
+              <plantilla_articulos_estilo_principal_v2_home :modoSimple="true" :articulos="filteredDataModalChart1" :filtrosActivos="filtrosActivos" />
             </VListItem>
           </div>
           <div v-else>
