@@ -728,7 +728,7 @@ function obtenerHora() {
       <VCol cols="12" md="5" lg="5">
         <VRow>
           <VCol cols="12" sm="12" lg="12">
-            <pastelWordCloud v-if="topKeywords.length > 0" :limitKeywords="125" :data="allKeywords" :dataTags="allTags" :dataListArticles="dataAll" />
+            <pastelWordCloud :displayTagsList="false" v-if="topKeywords.length > 0" :limitKeywords="125" :data="allKeywords" :dataTags="allTags" :dataListArticles="dataAll" />
           </VCol>
           <VCol cols="12" md="12" lg="12">
             <datos_bar_vertical_noticias_por_hora :articulos="dataAll" :disabledAll="false" :height="310" />
