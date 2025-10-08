@@ -1,13 +1,13 @@
 <script setup>
-import datos_bar_vertical_noticias_por_hora_v2_home from '@/views/apps/radar/v2/datos_bar_vertical_noticias_por_hora_v2_home.vue';
-import plantilla_articulos_estilo_principal_v2_home from '@/views/apps/radar/v2/plantilla_articulos_estilo_principal_v2_home.vue';
+import datos_bar_vertical_noticias_por_hora from '@/views/apps/radar/v2/datos_bar_vertical_noticias_por_hora.vue';
+import plantilla_articulos_estilo_principal from '@/views/apps/radar/v2/plantilla_articulos_estilo_principal.vue';
 // import { useAppConfigStore } from '@core/stores/appConfig'
 // // Instancia del store de configuración
 // const appConfig = useAppConfigStore()
 // appConfig.isVerticalNavCollapsed = true
 // import ApexChartPasteTotalDia from '@/views/apps/radar/pastel-ultimas-noticias-total-diav2.vue';
 // import ApexChartExpenseRatio from '@/views/apps/radar/pastel-ultimas-noticiasv2.vue';
-import pastel_word_cloud_v2_home from '@/views/apps/radar/v2/pastel_word_cloud_v2_home.vue';
+import pastelWordCloud from '@/views/apps/radar/v2/pastel-word-cloud.vue';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
@@ -728,15 +728,15 @@ function obtenerHora() {
       <VCol cols="12" md="5" lg="5">
         <VRow>
           <VCol cols="12" sm="12" lg="12">
-            <pastel_word_cloud_v2_home v-if="topKeywords.length > 0" :limitKeywords="125" :data="allKeywords" :dataTags="allTags" :dataListArticles="dataAll" />
+            <pastelWordCloud v-if="topKeywords.length > 0" :limitKeywords="125" :data="allKeywords" :dataTags="allTags" :dataListArticles="dataAll" />
           </VCol>
           <VCol cols="12" md="12" lg="12">
-            <datos_bar_vertical_noticias_por_hora_v2_home :articulos="dataAll" :disabledAll="false" :height="310" />
+            <datos_bar_vertical_noticias_por_hora :articulos="dataAll" :disabledAll="false" :height="310" />
           </VCol>
         </VRow>
       </VCol>
       <VCol cols="12" md="7" lg="7">
-        <plantilla_articulos_estilo_principal_v2_home :articulos="filteredData" :filtrosActivos="filtrosActivos" :modoSimple="true" />
+        <plantilla_articulos_estilo_principal :articulos="filteredData" :filtrosActivos="filtrosActivos" :modoSimple="true" />
       </VCol>
     </VRow>
     <VRow class="d-none">
