@@ -117,19 +117,7 @@ function agruparPorAtributo(data, atributo) {
 }
 
 function limpiarEspacios(texto) {
-    try {
-      if(typeof texto !== "string" && (!Array.isArray(texto) && typeof texto !== "object")){
-        return "";
-      }
-
-      if(Array.isArray(texto)){
-        return texto.map(e => e.trim()).join(',').replace(/,/g, ',')?.toUpperCase();
-      }
-      
-      return texto.replace(/\s*,\s*/g, ',')?.toUpperCase();
-    } catch (error) {
-      return "";
-    }
+    return texto.replace(/\s*,\s*/g, ',');
 }
 
 function extraerPaths(url) {
@@ -232,8 +220,8 @@ const principalData = async function () {
             noticia.vertical = noticia.seccion;
             noticia.subVertical = noticia.subseccion;
             if(noticia.keywords){
-              noticia.keywords = limpiarEspacios(noticia.keywords);
-              noticia.tags = limpiarEspacios(noticia.tags);
+              noticia.keywords = limpiarEspacios(noticia.keywords.toUpperCase());
+              noticia.tags = limpiarEspacios(noticia.tags.toUpperCase());
             }
 
             if(noticia.url_communication){

@@ -132,7 +132,7 @@ function limpiarEspacios(texto) {
       }
 
       if(Array.isArray(texto)){
-        return texto.map(e => e.trim()).join(',').replace(/,/g, ',')?.toUpperCase();
+        return texto.map(e => limpiarEspacios(e));
       }
       
       return texto.replace(/\s*,\s*/g, ',')?.toUpperCase();
