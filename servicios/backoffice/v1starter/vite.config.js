@@ -1,41 +1,61 @@
-import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import DefineOptions from 'unplugin-vue-define-options/vite'
+import { fileURLToPath } from 'url'
+import { defineConfig, loadEnv } from 'vite'
 import Pages from 'vite-plugin-pages'
 import Layouts from 'vite-plugin-vue-layouts'
 import vuetify from 'vite-plugin-vuetify'
-import { fileURLToPath } from 'url'
 
+// https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
-  const env = loadEnv(mode, process.cwd(), '')
+
+
+  
+  // Cargar variables de entorno
+  const env = loadEnv(mode, process.cwd(), '');
 
   return {
-    base: env.BASE_URL || '/',
+
+    // server: {
+    //   proxy: {
+    //     '/api': {
+    //       target: 'https://services.ecuavisa.com',
+    //       changeOrigin: true,
+    //       rewrite: (path) => path.replace(/^\/api/, '')
+    //     }
+    //   }
+    // },
+    base: (env.BASE_URL || '/'),
     plugins: [
       vue(),
       vueJsx(),
+
+      // https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vite-plugin
       vuetify({
-        styles: { configFile: 'src/styles/variables/_vuetify.scss' },
+        styles: {
+          configFile: 'src/styles/variables/_vuetify.scss',
+        },
       }),
-      Pages({ dirs: ['src/views'] }),
+      Pages({}),
       Layouts(),
       Components({
         dirs: ['src/@core/components', 'src/views/demos'],
-        dts: 'src/components.d.ts',
-        include: [/\.vue$/, /\.vue\?vue/],
+        dts: true,
       }),
       AutoImport({
-        imports: ['vue', 'vue-router', '@vueuse/core', 'pinia'],
+        eslintrc: {
+          enabled: true,
+          filepath: './.eslintrc-auto-import.json',
+        },
+        imports: ['vue', 'vue-router', '@vueuse/core', '@vueuse/math', 'pinia'],
         vueTemplate: true,
       }),
       DefineOptions(),
     ],
-
     define: { 'process.env': {} },
-
     resolve: {
       alias: {
         '@': fileURLToPath(new URL('./src', import.meta.url)),
@@ -48,16 +68,21 @@ export default defineConfig(({ mode }) => {
         'apexcharts': fileURLToPath(new URL('node_modules/apexcharts-clevision', import.meta.url)),
       },
     },
-
     build: {
-      minify: 'esbuild',
-      sourcemap: false,
-      chunkSizeWarningLimit: 15000,
+      terserOptions: {
+        compress: {
+          drop_console: true, // Elimina console.log para reducir tamaño
+          drop_debugger: true
+        }
+      },
+      ssrEmitAssets: true,
+      chunkSizeWarningLimit: 15000
     },
-
     optimizeDeps: {
       exclude: ['vuetify'],
-      entries: ['./src/**/*.vue'],
+      entries: [
+        './src/**/*.vue',
+      ],
     },
   }
-})
+});
