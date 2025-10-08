@@ -1,13 +1,21 @@
 <script setup>
 import datos_bar_vertical_noticias_por_hora from '@/views/apps/radar/v2/datos_bar_vertical_noticias_por_hora.vue';
 import plantilla_articulos_estilo_principal from '@/views/apps/radar/v2/plantilla_articulos_estilo_principal.vue';
+// import { useAppConfigStore } from '@core/stores/appConfig'
+// // Instancia del store de configuración
+// const appConfig = useAppConfigStore()
+// appConfig.isVerticalNavCollapsed = true
 // import ApexChartPasteTotalDia from '@/views/apps/radar/pastel-ultimas-noticias-total-diav2.vue';
 // import ApexChartExpenseRatio from '@/views/apps/radar/pastel-ultimas-noticiasv2.vue';
-import pastelWordCloud from '@/views/apps/radar/v2/pastel-word-cloud.vue';
+import pastel_word_cloud from '@/views/apps/radar/v2/pastel-word-cloud.vue';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
 import { computed, onMounted, reactive, ref, watch } from 'vue';
+import {
+  injectionKeyIsVerticalNavHovered,
+  useLayouts,
+} from '@layouts'
 
 const moment = extendMoment(Moment);
 moment.locale('es', [esLocale]);
@@ -26,6 +34,13 @@ const filtrosActivos = reactive({
   subseccion: [],
   disabled: false
 });
+
+const {
+  isVerticalNavCollapsed: isCollapsed,
+  isLessThanOverlayNavBreakpoint,
+  isVerticalNavMini,
+  isAppRtl,
+} = useLayouts()
 
 const lastUpdate = ref({
   fechai: moment().startOf('day').format("YYYY-MM-DD HH:mm"),
@@ -117,7 +132,19 @@ function agruparPorAtributo(data, atributo) {
 }
 
 function limpiarEspacios(texto) {
-    return texto.replace(/\s*,\s*/g, ',');
+    try {
+      if(typeof texto !== "string" && (!Array.isArray(texto) && typeof texto !== "object")){
+        return "";
+      }
+
+      if(Array.isArray(texto)){
+        return texto.map(e => e.trim()).join(',').replace(/,/g, ',')?.toUpperCase();
+      }
+      
+      return texto.replace(/\s*,\s*/g, ',')?.toUpperCase();
+    } catch (error) {
+      return "";
+    }
 }
 
 function extraerPaths(url) {
@@ -157,6 +184,13 @@ function extraerPaths(url) {
   }
 }
 
+const normalize = (val) => {
+  if (Array.isArray(val)) {
+    return val.join(",");
+  }
+  return val; // ya es string
+};
+
 const principalData = async function () {
   try {
     filtrosActivos.busqueda = "";
@@ -173,15 +207,18 @@ const principalData = async function () {
     const results = await Promise.all(fetchPromises);
     const allResults = [];
     for(var i in results[[0]]){
-      if(results[0][i]?.articles){
-        for(var j in results[0][i].articles){
-          if(!results[0][i]?.articles[j].hasOwnProperty("getArticle")){
-            //Añadir url_communication a cada artículo
-            allResults.push({
-              ...results[0][i]?.articles[j], 
-              media_communication: results[0][i]?.media_communication,
-              url_communication: results[0][i]?.url_communication,
-            });
+      const {media_communication = ""} = results[0][i];
+      if(!["nytimes","elpais", "cnnespanol"].includes(media_communication)){
+        if(results[0][i]?.articles){
+          for(var j in results[0][i].articles){
+            if(!results[0][i]?.articles[j].hasOwnProperty("getArticle")){
+              //Añadir url_communication a cada artículo
+              allResults.push({
+                ...results[0][i]?.articles[j], 
+                media_communication: results[0][i]?.media_communication,
+                url_communication: results[0][i]?.url_communication,
+              });
+            }
           }
         }
       }
@@ -220,8 +257,11 @@ const principalData = async function () {
             noticia.vertical = noticia.seccion;
             noticia.subVertical = noticia.subseccion;
             if(noticia.keywords){
-              noticia.keywords = limpiarEspacios(noticia.keywords.toUpperCase());
-              noticia.tags = limpiarEspacios(noticia.tags.toUpperCase());
+              let {keywords = "", tags = ""} = noticia;
+              keywords = normalize(keywords);
+              tags = normalize(tags);
+              noticia.keywords = limpiarEspacios(keywords);
+              noticia.tags = limpiarEspacios(tags);
             }
 
             if(noticia.url_communication){
@@ -606,7 +646,7 @@ function procesarKeywordsAndTags(articles){
 ******* FIN FILTRO pastelWordCloud
 */
 
-onMounted(async () => {
+async function initModulo(){
   await principalData();
   await loadSiteNames();
 
@@ -614,16 +654,27 @@ onMounted(async () => {
   itemsSitioWebSubSeccion.value = getUniqueSubVerticals(dataAll.value);
 
   procesarKeywordsAndTags(dataAll.value);
+}
+
+onMounted(async () => {
+  await initModulo();
   obtenerHora();
+  isCollapsed.value = true;
+  const elemento = document.getElementById('content-padre')
+  if (elemento) {
+    const y = elemento.getBoundingClientRect().top + window.scrollY - 80 // 👈 resta 20px
+    window.scrollTo({ top: y, behavior: 'smooth' })
+  }
 });
 
 function obtenerHora() {
-  // Espera 5 minutos (300,000 ms) y luego ejecuta la función deseada
+  // Espera 2 minutos (300,000 ms) y luego ejecuta la función deseada
   setTimeout(() => {
-    console.log("Han pasado 5 minutos. Ejecutando función...");
-    principalData(); // Llama a la función deseada
+    console.log("Han pasado 2 minutos. Ejecutando función...");
+    // principalData(); // Llama a la función deseada
+    initModulo()
     // window.location.reload(); // Si deseas recargar la página
-  }, (1000 * 60 * 5));
+  }, (1000 * 60 * 5)); // 5min
 }
 
 </script>
@@ -640,7 +691,7 @@ function obtenerHora() {
     <VRow>
       <VCol cols="12" md="12" lg="12">
         <VCard>
-          <VCardItem>
+          <VCardItem class="py-2 px-2">
             <div class="d-flex content-title flex-wrap w-100">
               <div class="d-flex gap-3 justify-space-between w-100">
                 <div class="d-flex flex-column" style="line-height: 1.3;">
@@ -651,8 +702,8 @@ function obtenerHora() {
                       {{ dataAll.length }} Artículo(s).
                     </VChip>
                   </div>
-                  <div class="content-btn mt-3">
-                    <VBtn :loading="loadingData" title="Recargar datos" @click="principalData" target="_blank"
+                  <div class="content-btn mt-3 d-none">
+                    <VBtn :loading="loadingData" title="Recargar datos" @click="initModulo" target="_blank"
                       color="primary" variant="tonal" size="small">
                       <VIcon icon="tabler-reload" /> Recargar datos
                     </VBtn>
@@ -670,6 +721,22 @@ function obtenerHora() {
             </div>
           </VCardItem>
         </VCard>
+      </VCol>
+    </VRow>
+    
+    <VRow id="content-padre">
+      <VCol cols="12" md="5" lg="5">
+        <VRow>
+          <VCol cols="12" sm="12" lg="12">
+            <pastel_word_cloud v-if="topKeywords.length > 0" :limitKeywords="125" :data="allKeywords" :dataTags="allTags" :dataListArticles="dataAll" />
+          </VCol>
+          <VCol cols="12" md="12" lg="12">
+            <datos_bar_vertical_noticias_por_hora :articulos="dataAll" :disabledAll="false" :height="310" />
+          </VCol>
+        </VRow>
+      </VCol>
+      <VCol cols="12" md="7" lg="7">
+        <plantilla_articulos_estilo_principal :articulos="filteredData" :filtrosActivos="filtrosActivos" :modoSimple="true" />
       </VCol>
     </VRow>
     <VRow class="d-none">
@@ -724,15 +791,19 @@ function obtenerHora() {
         </VCard>
       </VCol>
     </VRow>
-    <VRow>
-      <VCol cols="12" md="12" lg="12">
-        <plantilla_articulos_estilo_principal :articulos="filteredData" :filtrosActivos="filtrosActivos" />
-      </VCol>
-    </VRow>
   </section>
 </template>
-<style scoped>
+<style>
   .title-principal{
     font-size: 25px;
   }
+
+  .layout-content-width-boxed.layout-wrapper.layout-nav-type-vertical .layout-navbar,
+  .layout-content-width-boxed .layout-page-content {
+      width: 100%!important;
+      max-width: 100%!important;
+      max-inline-size: 100%!important;
+  }
+  
+
 </style>

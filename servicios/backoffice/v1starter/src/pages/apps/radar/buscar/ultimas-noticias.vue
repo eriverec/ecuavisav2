@@ -117,7 +117,19 @@ function agruparPorAtributo(data, atributo) {
 }
 
 function limpiarEspacios(texto) {
-    return texto.replace(/\s*,\s*/g, ',');
+    try {
+      if(typeof texto !== "string" && (!Array.isArray(texto) && typeof texto !== "object")){
+        return "";
+      }
+
+      if(Array.isArray(texto)){
+        return texto.map(e => e.trim()).join(',').replace(/,/g, ',')?.toUpperCase();
+      }
+      
+      return texto.replace(/\s*,\s*/g, ',')?.toUpperCase();
+    } catch (error) {
+      return "";
+    }
 }
 
 function extraerPaths(url) {
@@ -173,15 +185,18 @@ const principalData = async function () {
     const results = await Promise.all(fetchPromises);
     const allResults = [];
     for(var i in results[[0]]){
-      if(results[0][i]?.articles){
-        for(var j in results[0][i].articles){
-          if(!results[0][i]?.articles[j].hasOwnProperty("getArticle")){
-            //Añadir url_communication a cada artículo
-            allResults.push({
-              ...results[0][i]?.articles[j], 
-              media_communication: results[0][i]?.media_communication,
-              url_communication: results[0][i]?.url_communication,
-            });
+      const {media_communication = ""} = results[0][i];
+      if(!["nytimes","elpais", "cnnespanol"].includes(media_communication)){
+        if(results[0][i]?.articles){
+          for(var j in results[0][i].articles){
+            if(!results[0][i]?.articles[j].hasOwnProperty("getArticle")){
+              //Añadir url_communication a cada artículo
+              allResults.push({
+                ...results[0][i]?.articles[j], 
+                media_communication: results[0][i]?.media_communication,
+                url_communication: results[0][i]?.url_communication,
+              });
+            }
           }
         }
       }
@@ -220,8 +235,8 @@ const principalData = async function () {
             noticia.vertical = noticia.seccion;
             noticia.subVertical = noticia.subseccion;
             if(noticia.keywords){
-              noticia.keywords = limpiarEspacios(noticia.keywords.toUpperCase());
-              noticia.tags = limpiarEspacios(noticia.tags.toUpperCase());
+              noticia.keywords = limpiarEspacios(noticia.keywords);
+              noticia.tags = limpiarEspacios(noticia.tags);
             }
 
             if(noticia.url_communication){
@@ -357,6 +372,9 @@ async function loadSiteNames() {
           value: e.media_communication,
           title: e.media_communication.toUpperCase(),
         }
+      }).filter(e => {
+        const { value = "" } = e;
+        return !["nytimes","elpais", "cnnespanol"].includes(value);
       });
 
       const uniqueData = Array.from(new Map(itemsSitioWeb.value.map(item => [item.value, item])).values());
@@ -621,7 +639,7 @@ function procesarKeywordsAndTags(articles){
 ******* FIN FILTRO pastelWordCloud
 */
 
-onMounted(async () => {
+async function initModulo(){
   await principalData();
   await loadSiteNames();
 
@@ -629,6 +647,17 @@ onMounted(async () => {
   itemsSitioWebSubSeccion.value = getUniqueSubVerticals(dataAll.value);
 
   procesarKeywordsAndTags(dataAll.value);
+}
+
+onMounted(async () => {
+  // await principalData();
+  // await loadSiteNames();
+
+  // itemsSitioWebSeccion.value = getUniqueVerticals(dataAll.value);
+  // itemsSitioWebSubSeccion.value = getUniqueSubVerticals(dataAll.value);
+
+  // procesarKeywordsAndTags(dataAll.value);
+  await initModulo();
 });
 
 </script>
@@ -657,7 +686,7 @@ onMounted(async () => {
                     </VChip>
                   </div>
                   <div class="content-btn mt-3">
-                    <VBtn :loading="loadingData" title="Recargar datos" @click="principalData" target="_blank"
+                    <VBtn :loading="loadingData" title="Recargar datos" @click="initModulo" target="_blank"
                       color="primary" variant="tonal" size="small">
                       <VIcon icon="tabler-reload" /> Recargar datos
                     </VBtn>

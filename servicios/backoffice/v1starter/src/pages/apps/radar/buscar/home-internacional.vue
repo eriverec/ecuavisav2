@@ -19,11 +19,6 @@ const snackbar = ref({
   timeout: 3000
 })
 
-const lastUpdate = ref({
-  fechai: moment().startOf('day').format("YYYY-MM-DD HH:mm"),
-  fechaf: moment().format("YYYY-MM-DD HH:mm")
-})
-
 const filtrosActivos = reactive({
   busqueda: "",
   sitio: [],
@@ -31,6 +26,11 @@ const filtrosActivos = reactive({
   subseccion: [],
   disabled: false
 });
+
+const lastUpdate = ref({
+  fechai: moment().startOf('day').format("YYYY-MM-DD HH:mm"),
+  fechaf: moment().format("YYYY-MM-DD HH:mm")
+})
 
 const customColors = [
   '#ffe802',
@@ -169,6 +169,13 @@ function extraerPaths(url) {
   }
 }
 
+const normalize = (val) => {
+  if (Array.isArray(val)) {
+    return val.join(",");
+  }
+  return val; // ya es string
+};
+
 const principalData = async function () {
   try {
     filtrosActivos.busqueda = "";
@@ -185,15 +192,18 @@ const principalData = async function () {
     const results = await Promise.all(fetchPromises);
     const allResults = [];
     for(var i in results[[0]]){
-      if(results[0][i]?.articles){
-        for(var j in results[0][i].articles){
-          if(!results[0][i]?.articles[j].hasOwnProperty("getArticle")){
-            //Añadir url_communication a cada artículo
-            allResults.push({
-              ...results[0][i]?.articles[j], 
-              media_communication: results[0][i]?.media_communication,
-              url_communication: results[0][i]?.url_communication,
-            });
+      const {media_communication = ""} = results[0][i];
+      if(["infobae","nytimes","elpais", "cnnespanol"].includes(media_communication)){
+        if(results[0][i]?.articles){
+          for(var j in results[0][i].articles){
+            if(!results[0][i]?.articles[j].hasOwnProperty("getArticle")){
+              //Añadir url_communication a cada artículo
+              allResults.push({
+                ...results[0][i]?.articles[j], 
+                media_communication: results[0][i]?.media_communication,
+                url_communication: results[0][i]?.url_communication,
+              });
+            }
           }
         }
       }
@@ -232,8 +242,11 @@ const principalData = async function () {
             noticia.vertical = noticia.seccion;
             noticia.subVertical = noticia.subseccion;
             if(noticia.keywords){
-              noticia.keywords = limpiarEspacios(noticia.keywords);
-              noticia.tags = limpiarEspacios(noticia.tags);
+              let {keywords = "", tags = ""} = noticia;
+              keywords = normalize(keywords);
+              tags = normalize(tags);
+              noticia.keywords = limpiarEspacios(keywords);
+              noticia.tags = limpiarEspacios(tags);
             }
 
             if(noticia.url_communication){
@@ -626,7 +639,17 @@ onMounted(async () => {
   itemsSitioWebSubSeccion.value = getUniqueSubVerticals(dataAll.value);
 
   procesarKeywordsAndTags(dataAll.value);
+  obtenerHora();
 });
+
+function obtenerHora() {
+  // Espera 2 minutos (300,000 ms) y luego ejecuta la función deseada
+  setTimeout(() => {
+    console.log("Han pasado 2 minutos. Ejecutando función...");
+    principalData(); // Llama a la función deseada
+    // window.location.reload(); // Si deseas recargar la página
+  }, (1000 * 60 * 2));
+}
 
 </script>
 
@@ -646,7 +669,7 @@ onMounted(async () => {
             <div class="d-flex content-title flex-wrap w-100">
               <div class="d-flex gap-3 justify-space-between w-100">
                 <div class="d-flex flex-column" style="line-height: 1.3;">
-                  <h4 class="title-principal">Últimas noticias</h4>
+                  <h4 class="title-principal">Últimas noticias internacional</h4>
                   <div class="d-flex gap-2 align-center mt-2">
                     <small style="font-size: 10px;">Total de artículos procesados</small>
                     <VChip size="x-small" color="primary">
@@ -661,7 +684,7 @@ onMounted(async () => {
                   </div>
                 </div>
                 <div class="d-flex align-center gap-2 flex-column ">
-                  <VChip class="d-none" color="primary" size="small" prepend-icon="tabler-clock">
+                  <VChip color="primary" size="small" prepend-icon="tabler-clock">
                     Datos: {{ lastUpdate.fechai }}, {{ lastUpdate.fechaf }}
                   </VChip>
                   <VChip class="d-none" color="success" size="small" prepend-icon="tabler-clock">
@@ -678,11 +701,8 @@ onMounted(async () => {
       <VCol cols="12" md="12" lg="12">
         <datos_bar_vertical_noticias_por_hora :articulos="dataAll" :disabledAll="false" :height="310" />
       </VCol>
-      <VCol cols="12" sm="12" lg="12">
-        <pastelWordCloud v-if="topKeywords.length > 0" :limitKeywords="75" :data="allKeywords" :dataTags="allTags" :dataListArticles="dataAll" />
-      </VCol>
     </VRow>
-    <VRow>
+    <VRow class="d-none">
       <VCol cols="12" md="12" lg="12">
         <VCard>
           <VCardItem>
