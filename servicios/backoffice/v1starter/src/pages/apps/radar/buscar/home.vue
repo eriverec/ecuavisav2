@@ -3,6 +3,7 @@ import datos_bar_vertical_noticias_por_hora from '@/views/apps/radar/v2/datos_ba
 import plantilla_articulos_estilo_principal from '@/views/apps/radar/v2/plantilla_articulos_estilo_principal.vue';
 // import ApexChartPasteTotalDia from '@/views/apps/radar/pastel-ultimas-noticias-total-diav2.vue';
 // import ApexChartExpenseRatio from '@/views/apps/radar/pastel-ultimas-noticiasv2.vue';
+
 import pastelWordCloud from '@/views/apps/radar/v2/pastel-word-cloud.vue';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
@@ -117,7 +118,19 @@ function agruparPorAtributo(data, atributo) {
 }
 
 function limpiarEspacios(texto) {
-    return texto.replace(/\s*,\s*/g, ',');
+    try {
+      if(typeof texto !== "string" && (!Array.isArray(texto) && typeof texto !== "object")){
+        return "";
+      }
+
+      if(Array.isArray(texto)){
+        return texto.map(e => e.trim()).join(',').replace(/,/g, ',')?.toUpperCase();
+      }
+      
+      return texto.replace(/\s*,\s*/g, ',')?.toUpperCase();
+    } catch (error) {
+      return "";
+    }
 }
 
 function extraerPaths(url) {
@@ -173,15 +186,18 @@ const principalData = async function () {
     const results = await Promise.all(fetchPromises);
     const allResults = [];
     for(var i in results[[0]]){
-      if(results[0][i]?.articles){
-        for(var j in results[0][i].articles){
-          if(!results[0][i]?.articles[j].hasOwnProperty("getArticle")){
-            //Añadir url_communication a cada artículo
-            allResults.push({
-              ...results[0][i]?.articles[j], 
-              media_communication: results[0][i]?.media_communication,
-              url_communication: results[0][i]?.url_communication,
-            });
+      const {media_communication = ""} = results[0][i];
+      if(!["nytimes","elpais", "cnnespanol"].includes(media_communication)){
+        if(results[0][i]?.articles){
+          for(var j in results[0][i].articles){
+            if(!results[0][i]?.articles[j].hasOwnProperty("getArticle")){
+              //Añadir url_communication a cada artículo
+              allResults.push({
+                ...results[0][i]?.articles[j], 
+                media_communication: results[0][i]?.media_communication,
+                url_communication: results[0][i]?.url_communication,
+              });
+            }
           }
         }
       }
@@ -220,8 +236,8 @@ const principalData = async function () {
             noticia.vertical = noticia.seccion;
             noticia.subVertical = noticia.subseccion;
             if(noticia.keywords){
-              noticia.keywords = limpiarEspacios(noticia.keywords.toUpperCase());
-              noticia.tags = limpiarEspacios(noticia.tags.toUpperCase());
+              noticia.keywords = limpiarEspacios(noticia.keywords);
+              noticia.tags = limpiarEspacios(noticia.tags);
             }
 
             if(noticia.url_communication){

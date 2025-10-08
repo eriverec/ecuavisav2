@@ -58,7 +58,7 @@
                                     Forzar actualización de artículos
                                     <small class="text-center" style="line-height: 1.2;color:#666">
                                         <VCardSubtitle>
-                                            Artículos faltantes: <span>{{ detailsArticlesAll.data.numSinFechaPublicacion }}</span>
+                                            Artículos faltantes: <span>{{ detailsArticlesAll.data.numSinFechaPublicacion.length }}</span>
                                         </VCardSubtitle>
                                     </small>
                                 </h6>
@@ -195,7 +195,7 @@
             for(var i in data){
                 if(data[i]?.articles){
                     for(var j in data[i].articles){
-                        if(!data[i]?.articles[j].hasOwnProperty("getArticle")){
+                        if(!data[i]?.articles[j].hasOwnProperty("getArticle") && data[i]?.articles[j].category != "Rd Mundo" && data[i]?.articles[j].seccion != "metadatos"){
                             allResults.push(data[i].articles[j]);
                         }
                     }
@@ -203,9 +203,16 @@
             }
 
             detailsArticlesAll.value.data.all = allResults;
-            detailsArticlesAll.value.data.numFechaPublicacion = allResults.filter(e => e.fechaPublicacion).length;
-            detailsArticlesAll.value.data.numSinFechaPublicacion = allResults.filter(e => !e.fechaPublicacion).length;
-            // console.log(detailsArticlesAll.value)
+            detailsArticlesAll.value.data.numFechaPublicacion = allResults.filter(e => {
+                const { fechaPublicacion = "", title = "" } = e;
+                return fechaPublicacion != "" && title != "";
+            }).length;
+            detailsArticlesAll.value.data.numSinFechaPublicacion = allResults.filter(e => {
+                const { fechaPublicacion = "", title = "" } = e;
+                return fechaPublicacion == "" && title == "";
+            });
+
+            console.log(detailsArticlesAll.value.data.numSinFechaPublicacion)
             return true;
         } catch (error) {
             console.log(error)
