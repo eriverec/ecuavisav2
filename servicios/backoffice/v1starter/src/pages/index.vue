@@ -915,6 +915,15 @@ const toggleRealtime = () => {
     juntas();
   }
 };
+import { useRouter } from 'vue-router'
+const router = useRouter()
+
+onMounted(() => {
+  if(rol == 'radar'){
+    router.push({ name: 'apps-radar-buscar-home' });
+  }
+})
+
 onUnmounted(() => {
   clearInterval(intervalId)
 })

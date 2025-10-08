@@ -3,6 +3,7 @@ import navItemsA from '@/navigation/vertical';
 import navItemsVA from '@/navigation/verticalAudiencia';
 import navItemsM from '@/navigation/verticalMarketing';
 import navItemsR from '@/navigation/verticalRedaccion';
+import navItemsRadar from '@/navigation/verticalRadar';
 import navItemsV from '@/navigation/verticalVisor';
 import navItemsWm from '@/navigation/verticalWebmaster';
 import { useThemeConfig } from '@core/composable/useThemeConfig';
@@ -63,7 +64,6 @@ const pusher =() =>{
 onMounted(pusher);
 
 const resolveRole = computed(() =>{
-
 if(rol== 'administrador'){
   return navItemsA;
 }else if(rol== 'webmaster'){
@@ -74,6 +74,8 @@ if(rol== 'administrador'){
   return navItemsM;
 }else if(rol== 'audiencia'){
   return navItemsVA;
+}else if(rol== 'radar'){
+  return navItemsRadar;
 }else{
   return navItemsV;
 }
