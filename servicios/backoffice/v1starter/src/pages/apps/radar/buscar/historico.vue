@@ -126,19 +126,7 @@ function agruparPorAtributo(data, atributo) {
 }
 
 function limpiarEspacios(texto) {
-    try {
-      if(typeof texto !== "string" && (!Array.isArray(texto) && typeof texto !== "object")){
-        return "";
-      }
-
-      if(Array.isArray(texto)){
-        return texto.map(e => limpiarEspacios(e));
-      }
-      
-      return texto.replace(/\s*,\s*/g, ',')?.toUpperCase();
-    } catch (error) {
-      return "";
-    }
+    return texto.replace(/\s*,\s*/g, ',');
 }
 
 function extraerPaths(url) {
@@ -273,11 +261,8 @@ const principalData = async function (reset = false) {
             noticia.sitio = media_communication;
 
             if(noticia.keywords){
-              let {keywords = "", tags = ""} = noticia;
-              keywords = normalize(keywords);
-              tags = normalize(tags);
-              noticia.keywords = limpiarEspacios(keywords);
-              noticia.tags = limpiarEspacios(tags);
+              noticia.keywords = limpiarEspacios(noticia.keywords.toUpperCase());
+              noticia.tags = limpiarEspacios(noticia.tags.toUpperCase());
             }else{
               noticia.keywords = "";
               noticia.tags = "";
@@ -432,13 +417,6 @@ const debounceTimeout = ref(null);
 
 // Filtrado de datos (sin debounce)
 const filteredData = computed(() => dataManipulable.value);
-
-const normalize = (val) => {
-  if (Array.isArray(val)) {
-    return val.join(",");
-  }
-  return val; // ya es string
-};
 
 const normalizeText = (text) => {
   return text

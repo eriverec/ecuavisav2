@@ -514,7 +514,7 @@ function procesarKeywordsAndTags(articles){
   <VRow>
     <VCol cols="12" md="12" lg="12" class="pb-0">
       <VCard :class="props.modoSimple ? 'article-card elevation-0 border-0 rounded no-truncate px-0' : ''">
-        <VCardItem :class="props.modoSimple ? 'header_card_item px-2 py-1' : ''">
+        <VCardItem :class="props.modoSimple ? 'header_card_item px-0 py-1' : ''">
           <div class="d-flex justify-space-between">
             <div class="descripcion"  v-if="!props.modoSimple">
               <VCardTitle>Listado de artículos</VCardTitle>
@@ -572,7 +572,7 @@ function procesarKeywordsAndTags(articles){
           </div>
         </VCardItem>
 
-        <VCardText v-if="paginatedData.length > 0" :class="props.modoSimple ? 'px-2' : ''">
+        <VCardText v-if="paginatedData.length > 0" :class="props.modoSimple ? 'px-0' : ''">
           
           <VRow :disabled="isLoading">
             <VCol cols="12" v-if="props.filtrosActivos?.sitio.length > 0">

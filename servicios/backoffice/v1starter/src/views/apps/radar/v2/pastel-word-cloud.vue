@@ -16,8 +16,7 @@ import esLocale from "moment/locale/es";
     // dataTags: { type: Array, required: true },  // Propiedad que recibe los datos
     // dataListArticles: { type: Array, required: true },  // Propiedad que recibe los datos
     limitKeywords: { type: String, default: 75 },  // Propiedad que recibe los datos
-    selecteDisplay: { type: Boolean, required: true, default: true },
-    displayTagsList:{ type: Boolean, required: true, default: true }
+    selecteDisplay: { type: Boolean, required: true, default: true } 
   });
 
   const keywordsAndArticles = ref([]);
@@ -580,10 +579,10 @@ import esLocale from "moment/locale/es";
       </VCardItem>
       <VCardText>
         <VRow v-if="keywordsAndArticles.length > 0">
-          <VCol cols="12" :sm="props.displayTagsList ? 8 : 12" :lg="props.displayTagsList ? 8 : 12">
+          <VCol cols="12" sm="8" lg="8">
             <svg id="wordCloud" v-if="keywordsAndArticles.length > 0"></svg>
           </VCol>
-          <VCol cols="12" :sm="props.displayTagsList ? 4 : 12" :lg="props.displayTagsList ? 4 : 12" v-if="props.displayTagsList">
+          <VCol cols="12" sm="4" lg="4">
             <div v-for="(keyword, index) of (keywordsAndArticles.slice(0, 8))" :key="index">
               <VListItem @click="clickKeyword(keyword.label)"  style="cursor:pointer;">
                 <template #prepend>

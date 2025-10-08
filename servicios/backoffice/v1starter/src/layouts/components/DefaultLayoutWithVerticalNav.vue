@@ -63,6 +63,7 @@ const pusher =() =>{
 onMounted(pusher);
 
 const resolveRole = computed(() =>{
+
 if(rol== 'administrador'){
   return navItemsA;
 }else if(rol== 'webmaster'){

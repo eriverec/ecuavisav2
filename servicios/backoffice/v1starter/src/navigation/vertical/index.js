@@ -92,10 +92,7 @@ export default [
             to: 'apps-concursos-colegio-metricas',
           }
         ],
-      },
-      { title: 'Netlife Gaming', to: 'apps-concursos-gamer' },
-      { title: 'Wow', to: 'apps-concursos-wow' },
-
+      }
       // { title: 'Ecuavisa', to: 'apps-concursos-ecuavisa' },
 
     ],
@@ -149,7 +146,6 @@ export default [
     children: [
       { title: 'Editar Newsletter', to: 'apps-mailing-tabs-edit' },
       { title: 'Forzar Newsletter', to: 'apps-mailing-forzado' },
-      { title: 'Alertas de newsletters', to: 'apps-mailing-list-logs' }
       // { title: 'Churnrate', to: 'apps-mailing-churnrate' }
 
       // { title: 'Ads Ubicaciones', to: 'apps-miecuavisa-ads-ubicaciones' },

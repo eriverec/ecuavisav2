@@ -11,10 +11,23 @@ import vuetify from 'vite-plugin-vuetify'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
+
+
+  
   // Cargar variables de entorno
   const env = loadEnv(mode, process.cwd(), '');
 
   return {
+
+    // server: {
+    //   proxy: {
+    //     '/api': {
+    //       target: 'https://services.ecuavisa.com',
+    //       changeOrigin: true,
+    //       rewrite: (path) => path.replace(/^\/api/, '')
+    //     }
+    //   }
+    // },
     base: (env.BASE_URL || '/'),
     plugins: [
       vue(),
