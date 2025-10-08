@@ -33,10 +33,19 @@ export default [
         { title: 'Analítica', to: 'apps-suscriptores-analitica' },
       ],
     },
+    // {
+    //   title: 'NewsLetter',
+    //   to: { name: 'apps-mailing-tabs-edit' },
+    //   icon: { icon: 'tabler-mail' },
+    // },
+
     {
-      title: 'NewsLetter',
-      to: { name: 'apps-mailing-tabs-edit' },
+      title: 'Newsletter',
       icon: { icon: 'tabler-mail' },
+      children: [
+        { title: 'Editar Newsletter', to: 'apps-mailing-tabs-edit' },
+        { title: 'Alertas de newsletters', to: 'apps-mailing-list-logs' }
+      ],
     },
   
   {
@@ -57,15 +66,16 @@ export default [
 
     ],
   },    
-    // {
-    //   title: 'Concursos',
-    //   icon: { icon: 'tabler-balloon' },
-    //   // to: { name: 'apps-concursos' },
-    //   children: [
-    //     { title: 'Click click boom', to: 'apps-concursos' },
-    //     { title: 'Gavilanes', to: 'apps-concursos-gavilanes' },
-    //   ],
-    // },
+    {
+      title: 'Concursos',
+      icon: { icon: 'tabler-balloon' },
+      // to: { name: 'apps-concursos' },
+      children: [
+        // { title: 'Click click boom', to: 'apps-concursos' },
+        // { title: 'Gavilanes', to: 'apps-concursos-gavilanes' },
+        { title: 'Netlife Gaming', to: 'apps-concursos-gamer' },
+      ],
+    },
     
   
   ]

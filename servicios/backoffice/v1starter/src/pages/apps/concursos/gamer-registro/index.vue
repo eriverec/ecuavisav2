@@ -5,7 +5,8 @@ import debounce from 'lodash/debounce';
 import { extendMoment } from 'moment-range';
 import Moment from 'moment-timezone';
 import esLocale from "moment/locale/es";
-import ChartRandom from '../../../../views/apps/concursos/metrica_random.vue' // Ajusta la ruta según tu estructura
+import RegistrosChart from '../../../../views/apps/concursos/metrica_netlife.vue' // Ajusta la ruta según tu estructura
+
 const moment = extendMoment(Moment);
 moment.locale('es', [esLocale]);
 moment.tz.setDefault('America/Guayaquil');
@@ -156,11 +157,11 @@ async function getParticipantes(json = {}) {
     // var response = null;
 
     if (tipoModel.value == "Por Fecha") {
-      urlApiExport.value = `${dominioPrincipal}/backoffice/listado?fechai=${fechai}&fechaf=${fechaf}&search=${search}${estado}`;
+      urlApiExport.value = `${dominioPrincipal}/backoffice/registro/listado?fechai=${fechai}&fechaf=${fechaf}&search=${search}${estado}`;
       urlTitleExport.value = "concurso_GAMER_por_fecha";
       console.log(1)
     } else {
-      urlApiExport.value = `${dominioPrincipal}/backoffice/listado?fechai=&fechaf=&search=${search}${estado}`;
+      urlApiExport.value = `${dominioPrincipal}/backoffice/registro/listado?fechai=&fechaf=&search=${search}${estado}`;
       urlTitleExport.value = "concurso_GAMER";
       console.log(2)
     }
@@ -694,9 +695,8 @@ watch(estadoModel, async () => {
     </VSnackbar>
     <VRow>
       <VCol cols="12" sm="12" lg="12">
-        <h1>
-          Registrados, gamers
-        </h1>
+        <h1>Listado de registro gamers</h1>
+        
         <!-- <small class="mb-4 d-block">
           "Formulario de registro Juegos"
         </small> -->
@@ -772,9 +772,7 @@ watch(estadoModel, async () => {
           registros
         </small>
 
-
-        
-        <ChartRandom
+        <RegistrosChart
           ref="chartRef"
           :fecha-inicio="fecha.inicio"
           :fecha-fin="fecha.fin"
@@ -785,8 +783,7 @@ watch(estadoModel, async () => {
           @show-snackbar="showSnackbar"
         />
 
-
-        <VCard class="mt-1">
+        <VCard class="mt-4">
           <VTable class="text-no-wrap">
             <!-- 👉 table head -->
             <thead>
@@ -815,15 +812,16 @@ watch(estadoModel, async () => {
                 <th scope="col" title="E-mail de contacto">
                   E-mail
                 </th>
+              
                 <!-- <th scope="col" title="Link del DEMO(YouTube)">
                   Link del DEMO(YouTube)
                 </th> -->
                 <th scope="col">
                   Fecha de registro
                 </th>
-                <th scope="col">
+                <!-- <th scope="col">
                   Fecha de actualización
-                </th>
+                </th> -->
                 <th scope="col">
                   Acciones
                 </th>
@@ -873,6 +871,7 @@ watch(estadoModel, async () => {
                   <span class="text-base">{{ registro.contacto_email }}</span>
                 </td>
 
+          
                 <!-- <td>
                   <span class="text-base">{{ registro.link_youtube }}</span>
                 </td> -->
@@ -881,9 +880,9 @@ watch(estadoModel, async () => {
                   <span class="text-base">{{ moment(registro.created_at).format("YYYY-MM-DD HH:mm:ss") }}</span>
                 </td>
 
-                <td>
+                <!-- <td>
                   <span class="text-base">{{ moment(registro.updated_at).format("YYYY-MM-DD HH:mm:ss") }}</span>
-                </td>
+                </td> -->
 
 
                 <!-- 👉 Actions -->
@@ -909,14 +908,7 @@ watch(estadoModel, async () => {
                           <VIcon size="18" class="mr-1" icon="mdi-link" />
                           Ver DEMO (YouTube o Drive) 
                         </VListItem>
-                        <VDivider />
-                        <VListItem
-                          href="#"
-                          @click="eliminarRegistro(registro._id)"
-                        >
-                          <VIcon size="18" class="mr-1" color="error" icon="mdi-trash-can-outline" />
-                          Eliminar registro
-                        </VListItem>
+                       
                       </VList>
                     </VMenu>
                   </VBtn>

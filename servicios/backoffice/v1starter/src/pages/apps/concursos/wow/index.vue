@@ -62,9 +62,9 @@ const configSnackbar = ref({
 });
 
 const urlApiExport = ref("");
-const urlTitleExport = ref("usuarios_gamer");
-const dominioPrincipal = "https://concursos-usuarios.vercel.app/formulario-gamers";
-// const dominioPrincipal = "http://localhost:8080/formulario-gamers/";
+const urlTitleExport = ref("usuarios_wow");
+const dominioPrincipal = "https://concursos-usuarios.vercel.app/formulario-wow";
+// const dominioPrincipal = "http://localhost:8080/formulario-wow/";
 
 const headersGlobal = ref({
   _id: "_id",
@@ -72,16 +72,12 @@ const headersGlobal = ref({
   estado: "estado_registro",
   updated_at: "updated_at",
   created_at: "created_at",
-  link_youtube: "link_youtube",
   nombres: "nombres",
   apellidos: "apellidos",
   contacto_celular: "contacto_celular",
   contacto_email: "contacto_email",
-  genero: "genero",
   ciudad: "ciudad",
-  edad: "edad",
   check_consentimiento: "check_consentimiento",
-  check_politica_apto_juegos: "check_politica_apto_juegos",
   check_terminos_condiciones:"check_terminos_condiciones",
   created_at_formated:"created_at_formated",
   updated_at_formated:"updated_at_formated"
@@ -157,11 +153,11 @@ async function getParticipantes(json = {}) {
 
     if (tipoModel.value == "Por Fecha") {
       urlApiExport.value = `${dominioPrincipal}/backoffice/listado?fechai=${fechai}&fechaf=${fechaf}&search=${search}${estado}`;
-      urlTitleExport.value = "concurso_GAMER_por_fecha";
+      urlTitleExport.value = "concurso_wow_por_fecha";
       console.log(1)
     } else {
       urlApiExport.value = `${dominioPrincipal}/backoffice/listado?fechai=&fechaf=&search=${search}${estado}`;
-      urlTitleExport.value = "concurso_GAMER";
+      urlTitleExport.value = "concurso_wow";
       console.log(2)
     }
 
@@ -306,16 +302,12 @@ async function fetchFullRegistros() {
       newItem.estado = estadoText.find(e => e.value == item.estado)?.title || "";
       newItem.updated_at = item.updated_at || "";
       newItem.created_at = item.created_at || "";
-      newItem.link_youtube = item.link_youtube || "";
       newItem.nombres = item.nombres || "";
       newItem.apellidos = item.apellidos || "";
       newItem.contacto_celular = item.contacto_celular || "";
       newItem.contacto_email = item.contacto_email || "";
-      newItem.genero = item.genero || "";
       newItem.ciudad = item.ciudad || "";
-      newItem.edad = item.edad || "";
       newItem.check_consentimiento = item.check_consentimiento == "1" ? "Si" : "No" || "Si";
-      newItem.check_politica_apto_juegos = item.check_politica_apto_juegos == "1" ? "Si" : "No" || "Si";
       newItem.check_terminos_condiciones = item.check_terminos_condiciones == "1" ? "Si" : "No" || "Si";
       newItem.updated_at_formated = item.updated_at_formated || "";
       newItem.created_at_formated = item.created_at_formated || "";
@@ -438,7 +430,7 @@ async function downloadSearch() {
     doc = usersFull.value
     var title = `${urlTitleExport.value}`;
 
-    logAction('descarga-completa-formulario-gamer');
+    logAction('descarga-completa-formulario-wao');
 
     exportCSVFile(headersGlobal.value, eliminarDuplicadosPorWylexId(doc), title);
 
@@ -806,11 +798,8 @@ watch(estadoModel, async () => {
                 <th scope="col" title="Apellidos">
                   Apellidos
                 </th>
-                <th scope="col" title="Género">
-                  Género
-                </th>
-                <th scope="col" title="Edad">
-                  Edad
+                <th scope="col" title="Ciudad">
+                  Ciudad
                 </th>
                 <th scope="col" title="E-mail de contacto">
                   E-mail
@@ -824,9 +813,7 @@ watch(estadoModel, async () => {
                 <th scope="col">
                   Fecha de actualización
                 </th>
-                <th scope="col">
-                  Acciones
-                </th>
+            
               </tr>
             </thead>
             <!-- 👉 table body -->
@@ -862,20 +849,13 @@ watch(estadoModel, async () => {
                 </td>
 
                 <td>
-                  <span class="text-base">{{ registro.genero }}</span>
+                  <span class="text-base">{{ registro.ciudad }}</span>
                 </td>
 
-                <td>
-                  <span class="text-base">{{ registro.edad }}</span>
-                </td>
-
+                
                 <td>
                   <span class="text-base">{{ registro.contacto_email }}</span>
                 </td>
-
-                <!-- <td>
-                  <span class="text-base">{{ registro.link_youtube }}</span>
-                </td> -->
 
                 <td>
                   <span class="text-base">{{ moment(registro.created_at).format("YYYY-MM-DD HH:mm:ss") }}</span>
@@ -886,52 +866,7 @@ watch(estadoModel, async () => {
                 </td>
 
 
-                <!-- 👉 Actions -->
-                <td class="text-center" style="width: 5rem;">
-                  <VBtn
-                    icon
-                    variant="plain"
-                    color="default"
-                    size="x-small"
-                    :title="registro.institucion_nombre"
-                    v-model="idUserListModel[registro._id]"
-                  >
-                    <VIcon
-                      :size="22"
-                      icon="tabler-dots-vertical"
-                    />
-                    <VMenu activator="parent">
-                      <VList density="compact">
-                        <VListItem
-                          :href="registro.link_youtube"
-                          target="_blank"
-                        >
-                          <VIcon size="18" class="mr-1" icon="mdi-link" />
-                          Ver DEMO (YouTube o Drive) 
-                        </VListItem>
-                        <VDivider />
-                        <VListItem
-                          href="#"
-                          @click="eliminarRegistro(registro._id)"
-                        >
-                          <VIcon size="18" class="mr-1" color="error" icon="mdi-trash-can-outline" />
-                          Eliminar registro
-                        </VListItem>
-                      </VList>
-                    </VMenu>
-                  </VBtn>
-
-                  <VBtn disabled="true" icon size="x-small" color="default" variant="text" class="d-none">
-                    <VIcon size="22" icon="tabler-dots-vertical" />
-
-                    <VMenu activator="parent">
-                      <VList>
-                        <VListItem title="View" :to="{ name: 'apps-user-view-id', params: { id: registro._id } }" />
-                        <VListItem title="Suspend" href="javascript:void(0)" />
-                      </VList>
-                    </VMenu>
-                  </VBtn>
-                </td>
+             
               </tr>
             </tbody>
 

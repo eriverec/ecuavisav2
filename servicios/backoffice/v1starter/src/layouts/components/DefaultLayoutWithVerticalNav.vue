@@ -5,6 +5,7 @@ import navItemsM from '@/navigation/verticalMarketing';
 import navItemsR from '@/navigation/verticalRedaccion';
 import navItemsV from '@/navigation/verticalVisor';
 import navItemsWm from '@/navigation/verticalWebmaster';
+import navItemsRadar from '@/navigation/verticalRadar';
 import { useThemeConfig } from '@core/composable/useThemeConfig';
 import Pusher from 'pusher-js';
 // Components
@@ -74,6 +75,8 @@ if(rol== 'administrador'){
   return navItemsM;
 }else if(rol== 'audiencia'){
   return navItemsVA;
+}else if(rol== 'radar'){
+  return navItemsRadar;
 }else{
   return navItemsV;
 }
