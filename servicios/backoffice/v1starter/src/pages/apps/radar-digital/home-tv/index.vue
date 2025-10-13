@@ -28,10 +28,10 @@ onMounted(() => {
 
   const isTVUA = tvPatterns.some(pattern => userAgent.includes(pattern))
   // Algunos TVs tienen pantallas grandes pero con poca densidad de píxeles
-  const isLargeScreen = screenWidth <= 1030 && screenHeight >= 720
+  const isLargeScreen = screenWidth <= 1030 && screenWidth >= 720
 
   // No suelen tener eventos táctiles
-  const isNotTouch = !('ontouchstart' in window)
+  const isNotTouch = !('ontouchstart' in window) //&& isNotTouch
 
   isTV.value = isTVUA || (isLargeScreen && isNotTouch)
 })
