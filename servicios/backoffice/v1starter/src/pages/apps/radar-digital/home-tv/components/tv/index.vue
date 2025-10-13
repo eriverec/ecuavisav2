@@ -953,7 +953,7 @@ function obtenerHora() {
 }
 
 /* TV */
-@media (max-width: 1024px) {
+@media (max-width: 1130px) and (min-width: 720px) {
 	.layout-navbar.navbar-blur {
 		display: none !important;
 	}
