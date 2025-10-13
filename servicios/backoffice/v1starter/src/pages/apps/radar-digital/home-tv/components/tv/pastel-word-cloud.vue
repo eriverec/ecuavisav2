@@ -20,7 +20,7 @@ import esLocale from "moment/locale/es";
   const keywordsAndArticles = ref([]);
   const words = ref([]);
   const width = ref(window.innerWidth * 0.53);  // 90% del ancho de pantalla
-  const height = ref(window.innerHeight * 0.45); // 50% de la altura de pantalla
+  const height = ref(window.innerHeight * 0.65); // 50% de la altura de pantalla
   const limitKeywords = ref(15);
   let updateTimeout = null; // Variable para manejar el debounce
 
@@ -576,7 +576,7 @@ import esLocale from "moment/locale/es";
             <svg id="wordCloud" v-if="keywordsAndArticles.length > 0"></svg>
           </VCol>
           <VCol cols="12" sm="4" lg="4" class="ps-0">
-            <div v-for="(keyword, index) of (keywordsAndArticles.slice(0, 4))" :key="index">
+            <div v-for="(keyword, index) of (keywordsAndArticles.slice(0, 6))" :key="index">
               <VListItem class="list-item-min-heigth-keyword px-1">
                 <template #prepend>
                   <VAvatar
