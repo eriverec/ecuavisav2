@@ -218,29 +218,29 @@
           },
         },
         yaxis: {
-          title: {
-            text: 'Número de artículos',
-            style: {
-                fontSize: '11px',
-                fontFamily: 'Public Sans',
-                color: labelColor
-            }
-          },
+          // title: {
+          //   text: 'Número de artículos',
+          //   style: {
+          //       fontSize: '11px',
+          //       fontFamily: 'Public Sans',
+          //       color: labelColor
+          //   }
+          // },
           labels: {
             style: { colors: themeDisabledTextColor },
           },
         },
         xaxis: {
-          title: {
-            text: props.disabledAll ? undefined : (`Desde ${rangoHora.inicio.hoy ? "" : rangoHora.inicio.fecha + "," } ${rangoHora.inicio.hora } hasta ${rangoHora.inicio.hoy ? "" : "Hoy," } ${rangoHora.final.hora }`),
-            style: {
-                fontSize: '11px',
-                fontFamily: 'Public Sans',
-                color: labelColor,
-                cssClass: 'apexcharts-xaxis-laber-cursor',
-                cursor:"pointer"
-            }
-          },
+          // title: {
+          //   text: props.disabledAll ? undefined : (`Desde ${rangoHora.inicio.hoy ? "" : rangoHora.inicio.fecha + "," } ${rangoHora.inicio.hora } hasta ${rangoHora.inicio.hoy ? "" : "Hoy," } ${rangoHora.final.hora }`),
+          //   style: {
+          //       fontSize: '11px',
+          //       fontFamily: 'Public Sans',
+          //       color: labelColor,
+          //       cssClass: 'apexcharts-xaxis-laber-cursor',
+          //       cursor:"pointer"
+          //   }
+          // },
           axisBorder: { show: false },
           axisTicks: { color: themeBorderColor },
           categories: categoriesRaw,
@@ -249,7 +249,10 @@
                 cssClass: 'apexcharts-xaxis-laber-cursor'
             },
             show: true,
-            style: { colors: themeDisabledTextColor },
+            style: { 
+              colors: themeDisabledTextColor ,
+              fontSize: '8px',
+            },
             formatter: function(value, timestamp, opts) {
               if(value){
                 return value.toString().toUpperCase();
@@ -427,8 +430,8 @@
         <VCardItem class="header_card_item px-2 py-2" v-if="!props.disabledAll">
           <div class="d-flex">
             <div class="descripcion">
-              <VCardTitle>Artículos: {{model_select_hora.title}}</VCardTitle>
-              <VCardSubtitle>
+              <VCardTitle>Artículos de {{model_select_hora.title}}</VCardTitle>
+              <VCardSubtitle class="d-none">
                 Agrupados por medios digitales según la fecha de publicación de los artículos
               </VCardSubtitle>
             </div>
@@ -436,6 +439,7 @@
 
           <template #append>
             <VSelect 
+              class="d-none"
               style="min-width: 150px;"
               label="Filtrar por hora"
               v-model="model_select_hora"

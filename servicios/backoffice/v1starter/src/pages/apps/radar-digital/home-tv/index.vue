@@ -762,17 +762,17 @@ function obtenerHora() {
     </VRow>
 
     <VRow id="content-padre">
-      <VCol cols="12" md="5" lg="5">
+      <VCol cols="12" md="5" lg="5" class="">
         <VRow>
-          <VCol cols="12" sm="12" lg="12">
+          <VCol cols="12" sm="12" lg="12" class="">
             <pastelWordCloud v-if="topKeywords.length > 0" :limitKeywords="125" :data="allKeywords" :dataTags="allTags" :dataListArticles="dataAll" />
           </VCol>
-          <VCol cols="12" md="12" lg="12">
-            <datos_bar_vertical_noticias_por_hora :articulos="dataAll" :disabledAll="false" :height="310" />
+          <VCol cols="12" md="12" lg="12" class="pt-0">
+            <datos_bar_vertical_noticias_por_hora :articulos="dataAll" :disabledAll="false" :height="220" />
           </VCol>
         </VRow>
       </VCol>
-      <VCol cols="12" md="7" lg="7">
+      <VCol cols="12" md="7" lg="7" class="ps-0">
         <plantilla_articulos_estilo_principal :articulos="filteredData" :filtrosActivos="filtrosActivos" :modoSimple="true" />
       </VCol>
     </VRow>
@@ -788,5 +788,9 @@ function obtenerHora() {
     width: 100%!important;
     max-width: 100%!important;
     max-inline-size: 100%!important;
+}
+
+.layout-wrapper.layout-nav-type-vertical.layout-navbar-sticky .layout-page-content{
+  margin-block-start: 0rem;
 }
 </style>

@@ -20,7 +20,7 @@ import esLocale from "moment/locale/es";
   const keywordsAndArticles = ref([]);
   const words = ref([]);
   const width = ref(window.innerWidth * 0.53);  // 90% del ancho de pantalla
-  const height = ref(window.innerHeight * 0.53); // 50% de la altura de pantalla
+  const height = ref(window.innerHeight * 0.45); // 50% de la altura de pantalla
   const limitKeywords = ref(15);
   let updateTimeout = null; // Variable para manejar el debounce
 
@@ -506,7 +506,7 @@ import esLocale from "moment/locale/es";
 
       <!-- Dialog Content -->
       <VCard>
-        <VCardItem >
+        <VCardItem class="px-1 py-1">
           <div class="d-flex content-title flex-wrap">
             <div class="d-flex gap-3">
               <div class="d-flex flex-column" style="line-height: 1.3;">
@@ -549,9 +549,9 @@ import esLocale from "moment/locale/es";
       </VCard>
     </VDialog>
     <VCard >
-      <VCardItem>
+      <VCardItem class="px-2 py-2">
         <VCardTitle>Palabras clave más Relevante</VCardTitle>
-        <VCardSubtitle>
+        <VCardSubtitle class="d-none">
           <!-- Agrupados por medios digitales según la fecha de publicación de los artículos -->
           Palabras clave: {{horaSelectedText}}
         </VCardSubtitle>
@@ -566,7 +566,7 @@ import esLocale from "moment/locale/es";
             item-title="title"
             item-value="value"
             return-object 
-            :class="!props.selecteDisplay ? 'd-none' : ''"
+            :class="!props.selecteDisplay ? 'd-none' : 'd-none'"
           />
         </template>
       </VCardItem>
