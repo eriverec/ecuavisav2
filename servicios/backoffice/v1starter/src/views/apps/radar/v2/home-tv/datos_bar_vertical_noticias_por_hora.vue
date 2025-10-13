@@ -427,7 +427,7 @@
   <VRow>
     <VCol cols="12" md="12" :class="isLoading?'disabled':''">
       <VCard :class="props.disabledAll ? 'elevation-0 border rounded no-truncate' : ''">
-        <VCardItem class="header_card_item px-2 py-2" v-if="!props.disabledAll">
+        <VCardItem class="header_card_item px-2 py-2 pb-0" v-if="!props.disabledAll">
           <div class="d-flex">
             <div class="descripcion">
               <VCardTitle>Artículos de {{model_select_hora.title}}</VCardTitle>
@@ -452,7 +452,7 @@
           </template>
         </VCardItem>
 
-        <VCardText>
+        <VCardText class="px-2 py-0">
           <VueApexCharts
             v-if="articulosLocal.length > 0"
             :key="generarIDHora()"

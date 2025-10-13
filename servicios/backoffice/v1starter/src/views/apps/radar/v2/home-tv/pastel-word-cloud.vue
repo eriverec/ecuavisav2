@@ -570,7 +570,7 @@ import esLocale from "moment/locale/es";
           />
         </template>
       </VCardItem>
-      <VCardText>
+      <VCardText class="px-2 py-0 pb-2">
         <VRow v-if="keywordsAndArticles.length > 0">
           <VCol cols="12" sm="12" lg="12">
             <svg id="wordCloud" v-if="keywordsAndArticles.length > 0"></svg>

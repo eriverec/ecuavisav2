@@ -636,7 +636,7 @@ function procesarKeywordsAndTags(articles) {
 					<VRow :disabled="isLoading">
 						<VCol
 							cols="12"
-							class="py-1"
+							class="py-0 pb-1"
 							v-for="(item, index) in paginatedData"
 							:key="item.enlace"
 						>
@@ -659,7 +659,7 @@ function procesarKeywordsAndTags(articles) {
 									<div class="article-content w-100">
 										<!-- Fila 1: medio, fecha y categoría -->
 										<div class="mb-0 grupoTopInfo">
-											<div class="article-meta d-flex align-center gap-2 mb-1">
+											<div class="article-meta d-flex align-center gap-2 mb-0">
 												<VChip
 													variant="elevated"
 													size="x-small"
@@ -809,13 +809,13 @@ function procesarKeywordsAndTags(articles) {
 }
 
 .img-content {
-	min-width: 40px;
-	width: 40px;
+	min-width: 35px;
+	width: 35px;
 }
 
 .fixed-avatar {
-	width: 40px;
-	height: 40px;
+	width: 35px;
+	height: 30px;
 	object-fit: cover;
 	object-position: center;
 }
@@ -829,7 +829,7 @@ function procesarKeywordsAndTags(articles) {
 }
 
 .article-title {
-	font-size: 0.7rem;
+	font-size: 0.6rem;
 	line-height: 1.3;
 	margin: 0;
 	overflow: hidden;
@@ -865,15 +865,19 @@ function procesarKeywordsAndTags(articles) {
 
 .article-meta-v-chip,
 .v2-home.text-caption {
-	font-size: calc(0.55rem - 5%) !important;
+	font-size: calc(0.55rem - 8%) !important;
 }
 
 .autor-ec{
-  font-size: calc(0.65rem - 5%) !important;
+  font-size: calc(0.65rem - 8%) !important;
 }
 
 .v-chip.v-chip--size-x-small{
-  --v-chip-height: 15px;
+  --v-chip-height: 12px;
+}
+
+.v-card .v-card-text {
+    line-height: 1;
 }
 
 @media (max-width: 991px) {
