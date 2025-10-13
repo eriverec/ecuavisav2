@@ -161,6 +161,13 @@ const filteredDataModalKeyWord = computed(() => {
 // FIN DE EVENTO CLICK GRAFICO 1
 
 /*
+
+
+
+
+
+
+
   FIN - FUNCIONALIDAD
   */
 
@@ -181,6 +188,11 @@ const paginatedData = computed(() => {
 });
 
 /*
+
+
+
+
+
   FIN - FUNCIONALIDAD PAGINADO
   */
 
@@ -205,6 +217,15 @@ const paginatedDataModalKeyWord = computed(() => {
 });
 
 /*
+
+
+
+
+
+
+
+
+
   FIN - FUNCIONALIDAD PAGINADOModalKeyWord
   */
 
@@ -284,6 +305,15 @@ watch(
 	}
 );
 /*
+
+
+
+
+
+
+
+
+
   @FIN SELECTOR DE TIEMPO
   */
 
@@ -476,7 +506,7 @@ function procesarKeywordsAndTags(articles) {
 										size="64"
 										rounded
 									/>
-									<VIcon v-else icon="tabler-news" size="2" />
+									<VIcon v-else icon="tabler-news" size="32" />
 								</template>
 								<VChip
 									v-if="item.sitio"
@@ -568,7 +598,7 @@ function procesarKeywordsAndTags(articles) {
 				"
 			>
 				<VCardItem
-					:class="props.modoSimple ? 'header_card_item px-2 py-0' : ''"
+					:class="props.modoSimple ? 'header_card_item px-2 py-1' : ''"
 				>
 					<div class="d-flex justify-space-between">
 						<div class="descripcion" v-if="!props.modoSimple">
@@ -613,7 +643,7 @@ function procesarKeywordsAndTags(articles) {
 								item-title="title"
 								item-value="value"
 								return-object
-								:class="!props.selecteDisplay ? 'd-none' : 'd-none'"
+								:class="!props.selecteDisplay ? 'd-none' : ''"
 							/>
 
 							<VSelect
@@ -623,7 +653,7 @@ function procesarKeywordsAndTags(articles) {
 								label="Registros por página"
 								dense
 								outlined
-								class="mb-4 d-none"
+								class="mb-4"
 							/>
 						</div>
 					</div>
@@ -636,14 +666,14 @@ function procesarKeywordsAndTags(articles) {
 					<VRow :disabled="isLoading">
 						<VCol
 							cols="12"
-							class="py-0 pb-1"
 							v-for="(item, index) in paginatedData"
 							:key="item.enlace"
+							class="py-0 pt-2"
 						>
 							<VCard
 								class="article-card elevation-0 border rounded no-truncate"
 							>
-								<VCardText class="d-flex align-center gap-2 px-1 py-1">
+								<VCardText class="d-flex align-center gap-2">
 									<!-- Imagen -->
 									<div class="img-content">
 										<img
@@ -652,36 +682,35 @@ function procesarKeywordsAndTags(articles) {
 											class="fixed-avatar rounded"
 											alt="Article image"
 										/>
-										<VIcon v-else icon="tabler-news" size="30" />
+										<VIcon v-else icon="tabler-news" size="40" />
 									</div>
 
 									<!-- Contenido -->
 									<div class="article-content w-100">
 										<!-- Fila 1: medio, fecha y categoría -->
-										<div class="mb-0 grupoTopInfo">
+										<div class="mb-3 grupoTopInfo">
 											<div class="article-meta d-flex align-center gap-2 mb-1">
 												<VChip
 													variant="elevated"
 													size="x-small"
 													:color="item.color"
-                          class="article-meta-v-chip"
 												>
 													{{ item.sitio }}
 												</VChip>
-												<span class="text-caption v2-home">{{
+												<span class="text-caption">{{
 													formatDate(item.fechaPublicacion)
 												}}</span>
-												<VChip size="x-small" class="article-meta-v-chip">{{ item.vertical }}</VChip>
-												<div class="autor-ec " title="Autor">
-													<VIcon icon="tabler-user" size="10" />
+												<VChip size="x-small">{{ item.vertical }}</VChip>
+												<div class="autor-ec" title="Autor">
+													<VIcon icon="tabler-user" size="15" />
 													<small>{{ item.autor }}</small>
 												</div>
 												<div
-													class="article-type-ec article-meta-v-chip"
+													class="article-type-ec"
 													title="Tipo de artículo"
 													v-if="!props.modoSimple"
 												>
-													<VIcon icon="tabler-article" size="10" />
+													<VIcon icon="tabler-article" size="15" />
 													<small>{{ item.tipo }}</small>
 												</div>
 											</div>
@@ -762,7 +791,7 @@ function procesarKeywordsAndTags(articles) {
 					</VRow>
 
 					<VPagination
-						class="mt-5 d-none"
+						class="mt-5"
 						v-model="currentPage"
 						:length="Math.ceil(filteredData.length / pageSize)"
 						total-visible="5"
@@ -809,13 +838,13 @@ function procesarKeywordsAndTags(articles) {
 }
 
 .img-content {
-	min-width: 35px;
-	width: 35px;
+	min-width: 50px;
+	width: 50px;
 }
 
 .fixed-avatar {
-	width: 35px;
-	height: 25px;
+	width: 50px;
+	height: 50px;
 	object-fit: cover;
 	object-position: center;
 }
@@ -829,7 +858,7 @@ function procesarKeywordsAndTags(articles) {
 }
 
 .article-title {
-	font-size: 0.6rem;
+	font-size: 1.15rem;
 	line-height: 1.3;
 	margin: 0;
 	overflow: hidden;
@@ -863,27 +892,6 @@ function procesarKeywordsAndTags(articles) {
 	align-items: center;
 }
 
-.article-meta-v-chip,
-.v2-home.text-caption {
-	font-size: calc(0.55rem - 8%) !important;
-}
-
-.autor-ec{
-  font-size: calc(0.65rem - 8%) !important;
-}
-
-.v-chip.v-chip--size-x-small{
-  --v-chip-height: 12px;
-}
-
-.v-card .v-card-text {
-    line-height: 1;
-}
-
-.text-caption.v2-home{
-	line-height: 1.2;
-}
-
 @media (max-width: 991px) {
 	.grupoTopInfo {
 		flex-direction: column;
@@ -894,8 +902,8 @@ function procesarKeywordsAndTags(articles) {
 /* Ajustes responsivos */
 @media (max-width: 600px) {
 	.img-content {
-		min-width: 25px;
-		width: 25px;
+		min-width: 30px;
+		width: 30px;
 	}
 
 	.fixed-avatar {
@@ -904,7 +912,7 @@ function procesarKeywordsAndTags(articles) {
 	}
 
 	.article-title {
-		font-size: 0.7rem;
+		font-size: 0.8rem;
 	}
 
 	.article-card .v-card-text {

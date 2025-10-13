@@ -20,7 +20,7 @@ import esLocale from "moment/locale/es";
   const keywordsAndArticles = ref([]);
   const words = ref([]);
   const width = ref(window.innerWidth * 0.53);  // 90% del ancho de pantalla
-  const height = ref(window.innerHeight * 0.45); // 50% de la altura de pantalla
+  const height = ref(window.innerHeight * 0.53); // 50% de la altura de pantalla
   const limitKeywords = ref(15);
   let updateTimeout = null; // Variable para manejar el debounce
 
@@ -506,7 +506,7 @@ import esLocale from "moment/locale/es";
 
       <!-- Dialog Content -->
       <VCard>
-        <VCardItem class="px-1 py-1">
+        <VCardItem >
           <div class="d-flex content-title flex-wrap">
             <div class="d-flex gap-3">
               <div class="d-flex flex-column" style="line-height: 1.3;">
@@ -521,7 +521,7 @@ import esLocale from "moment/locale/es";
                 </div>
               </div>
 
-              
+
             </div>
 
             <VTextField v-model="isDialogVisibleChart1.data.search" label="Buscar.."
@@ -533,7 +533,7 @@ import esLocale from "moment/locale/es";
         <VCardText style="max-height: 450px;">
           <VList lines="two" class="py-4">
             <div v-if="filteredDataModalChart1.length">
-              
+
             </div>
             <div v-else>
               <td colspan="4" class="no-results">No se encontraron resultados</td>
@@ -549,9 +549,9 @@ import esLocale from "moment/locale/es";
       </VCard>
     </VDialog>
     <VCard >
-      <VCardItem class="px-2 py-2">
+      <VCardItem>
         <VCardTitle>Palabras clave más Relevante</VCardTitle>
-        <VCardSubtitle class="d-none">
+        <VCardSubtitle>
           <!-- Agrupados por medios digitales según la fecha de publicación de los artículos -->
           Palabras clave: {{horaSelectedText}}
         </VCardSubtitle>
@@ -566,21 +566,21 @@ import esLocale from "moment/locale/es";
             item-title="title"
             item-value="value"
             return-object 
-            :class="!props.selecteDisplay ? 'd-none' : 'd-none'"
+            :class="!props.selecteDisplay ? 'd-none' : ''"
           />
         </template>
       </VCardItem>
-      <VCardText class="px-2 py-0 pb-2">
+      <VCardText>
         <VRow v-if="keywordsAndArticles.length > 0">
-          <VCol cols="12" sm="8" lg="8" class="pe-0">
+          <VCol cols="12" sm="12" lg="12">
             <svg id="wordCloud" v-if="keywordsAndArticles.length > 0"></svg>
           </VCol>
-          <VCol cols="12" sm="4" lg="4" class="ps-0">
-            <div v-for="(keyword, index) of (keywordsAndArticles.slice(0, 4))" :key="index">
-              <VListItem class="list-item-min-heigth-keyword px-1">
+          <VCol cols="12" sm="4" lg="4" v-if="true == false">
+            <div v-for="(keyword, index) of (keywordsAndArticles.slice(0, 8))" :key="index">
+              <VListItem @click="clickKeyword(keyword.label)"  style="cursor:pointer;">
                 <template #prepend>
                   <VAvatar
-                    size="16"
+                    size="36"
                     rounded
                     variant="tonal"
                     icon="tabler-world-code"
@@ -588,11 +588,11 @@ import esLocale from "moment/locale/es";
                   />
                 </template>
 
-                <VListItemTitle class="text-world-code">
+                <VListItemTitle>
                   {{ keyword.label }}
                 </VListItemTitle>
 
-                <VListItemSubtitle class="sub-text-world-code">
+                <VListItemSubtitle class="mt-2">
                   {{ keyword.value }}
                 </VListItemSubtitle>
               </VListItem>
@@ -670,24 +670,8 @@ td {
   opacity: 0.6;
 }
 
-.text-world-code{
-  font-size: 0.5rem;
-  line-height: 1.2;
-}
-
-.sub-text-world-code{
-  font-size: 0.5rem;
-  line-height: 1.2;
-}
-
-.list-item-min-heigth-keyword{
-  min-height: 20px;
-}
-
-.v-list-item__prepend > .v-avatar {
-    margin-inline-end: 5px;
-}
 /* th {
   background-color: #f2f2f2;
 } */
+
 </style>
