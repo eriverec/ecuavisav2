@@ -2,10 +2,11 @@
 import tv from './components/tv/index.vue'
 import web from './components/web/index.vue'
 const isTV = ref(false)
+const screenWidth = ref(0)
 
 onMounted(() => {
   const userAgent = navigator.userAgent.toLowerCase()
-  const screenWidth = window.innerWidth
+  screenWidth.value = window.innerWidth
   const screenHeight = window.innerHeight
 
   // Heurísticas comunes para TVs
@@ -28,7 +29,7 @@ onMounted(() => {
 
   const isTVUA = tvPatterns.some(pattern => userAgent.includes(pattern))
   // Algunos TVs tienen pantallas grandes pero con poca densidad de píxeles
-  const isLargeScreen = screenWidth <= 1030 && screenWidth >= 720;
+  const isLargeScreen = screenWidth.value <= 1030 && screenWidth.value >= 720;
 
   // No suelen tener eventos táctiles
   const isNotTouch = !('ontouchstart' in window) //&& isNotTouch
@@ -38,6 +39,8 @@ onMounted(() => {
 </script>
 
 <template>
+	{{screenWidth}}
+	{{isTV}}
 	<tv v-if="isTV" />
 	<web v-else />
 </template>

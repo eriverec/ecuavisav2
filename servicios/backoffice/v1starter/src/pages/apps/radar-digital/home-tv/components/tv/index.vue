@@ -740,40 +740,40 @@ function obtenerHora() {
 /**Iphone parece que es de 600 */
 /**PC parece que es de 1280 */
 
-const isTV = ref(false)
+// const isTV = ref(false)
 
-onMounted(() => {
-  const userAgent = navigator.userAgent.toLowerCase()
-  const screenWidth = window.innerWidth
-  const screenHeight = window.innerHeight
+// onMounted(() => {
+//   const userAgent = navigator.userAgent.toLowerCase()
+//   const screenWidth = window.innerWidth
+//   const screenHeight = window.innerHeight
 
-  // Heurísticas comunes para TVs
-  const tvPatterns = [
-    'smart-tv',
-    'smarttv',
-    'appletv',
-    'hbbtv',
-    'netcast',
-    'tizen',
-    'webos',
-    'viera',
-    'aquos',
-    'philips',
-    'roku',
-    'pov_tv',
-    'aoc-tv',
-    'tv safari',
-  ]
+//   // Heurísticas comunes para TVs
+//   const tvPatterns = [
+//     'smart-tv',
+//     'smarttv',
+//     'appletv',
+//     'hbbtv',
+//     'netcast',
+//     'tizen',
+//     'webos',
+//     'viera',
+//     'aquos',
+//     'philips',
+//     'roku',
+//     'pov_tv',
+//     'aoc-tv',
+//     'tv safari',
+//   ]
 
-  const isTVUA = tvPatterns.some(pattern => userAgent.includes(pattern))
-  // Algunos TVs tienen pantallas grandes pero con poca densidad de píxeles
-  const isLargeScreen = screenWidth <= 1030 && screenHeight >= 720
+//   const isTVUA = tvPatterns.some(pattern => userAgent.includes(pattern))
+//   // Algunos TVs tienen pantallas grandes pero con poca densidad de píxeles
+//   const isLargeScreen = screenWidth <= 1030 && screenHeight >= 720
 
-  // No suelen tener eventos táctiles
-  const isNotTouch = !('ontouchstart' in window)
+//   // No suelen tener eventos táctiles
+//   const isNotTouch = !('ontouchstart' in window)
 
-  isTV.value = isTVUA || (isLargeScreen && isNotTouch)
-})
+//   isTV.value = isTVUA || (isLargeScreen && isNotTouch)
+// })
 </script>
 
 <template>
@@ -798,7 +798,6 @@ onMounted(() => {
 										<small style="font-size: 10px"
 											>Total de artículos procesados</small
 										>
-										{{isTV}}
 										<VChip size="x-small" color="primary">
 											{{ dataAll.length }} Artículo(s).
 										</VChip>
