@@ -710,7 +710,7 @@ onMounted(async () => {
 
 function obtenerHora() {
 	// Espera 5 minutos (300,000 ms) y luego ejecuta la función deseada
-	setTimeout(() => {
+	setInterval(() => {
 		lastUpdate.value.fechaf = moment().format("YYYY-MM-DD HH:mm");
 		console.log("Han pasado 5 minutos. Ejecutando función...");
 		principalData(); // Llama a la función deseada
