@@ -717,7 +717,7 @@ function obtenerHora() {
 		console.log("Han pasado 5 minutos. Ejecutando función...");
 		initModulo(); // Llama a la función deseada
 		// window.location.reload(); // Si deseas recargar la página
-	}, 1000 * 60 * 1);
+	}, 1000 * 60 * 5);
 }
 </script>
 
