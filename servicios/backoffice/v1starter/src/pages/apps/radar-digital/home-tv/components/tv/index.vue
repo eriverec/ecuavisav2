@@ -313,10 +313,10 @@ const principalData = async function () {
 		dataAll.value = sortedData;
 		dataManipulable.value = sortedData;
 
-		lastUpdate.value.fechaf = moment(
-			sortedData[0].fechaPublicacion,
-			"DD/MM/YYYY HH:mm:ss"
-		).format("YYYY-MM-DD HH:mm");
+		// lastUpdate.value.fechaf = moment(
+		// 	sortedData[0].fechaPublicacion,
+		// 	"DD/MM/YYYY HH:mm:ss"
+		// ).format("YYYY-MM-DD HH:mm");
 
 		loadingData.value = false;
 		return true;
@@ -711,6 +711,7 @@ onMounted(async () => {
 function obtenerHora() {
 	// Espera 5 minutos (300,000 ms) y luego ejecuta la función deseada
 	setTimeout(() => {
+		lastUpdate.value.fechaf = moment().format("YYYY-MM-DD HH:mm");
 		console.log("Han pasado 5 minutos. Ejecutando función...");
 		principalData(); // Llama a la función deseada
 		// window.location.reload(); // Si deseas recargar la página
