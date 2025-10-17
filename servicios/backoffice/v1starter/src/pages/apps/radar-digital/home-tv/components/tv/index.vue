@@ -713,7 +713,7 @@ function obtenerHora() {
 	setInterval(() => {
 		lastUpdate.value.fechaf = moment().format("YYYY-MM-DD HH:mm");
 		console.log("Han pasado 5 minutos. Ejecutando función...");
-		principalData(); // Llama a la función deseada
+		initModulo(); // Llama a la función deseada
 		// window.location.reload(); // Si deseas recargar la página
 	}, 1000 * 60 * 5);
 }
