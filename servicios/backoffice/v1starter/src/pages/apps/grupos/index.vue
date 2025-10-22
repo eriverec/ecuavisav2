@@ -262,7 +262,7 @@ async function deletePaquete() {
         <VRow>
             <VCol cols="12" sm="12" lg="12">
                 <VCard>
-                <VCardTitle class="pt-4 pl-6">Lista de grupos de paquetes</VCardTitle>   
+                <VCardTitle class="pt-4 pl-6">Grupos de paquetes</VCardTitle>   
                  
                 <VCardText style="margin-bottom: -2rem;">
                         <div class="d-flex flex-wrap gap-4 mt-10">
