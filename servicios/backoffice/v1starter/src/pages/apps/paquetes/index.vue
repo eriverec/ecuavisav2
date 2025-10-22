@@ -14,8 +14,8 @@ const sitiosItems = ref([]);
 const sitiosRaw = ref([]);
 const urlRaw = ref(null);
 // dom prueba
-// const urlDom = "https://ecuavisa-suscripciones.vercel.app";
-const urlDom = "http://localhost:8080";
+const urlDom = "https://ecuavisa-suscripciones.vercel.app";
+// const urlDom = "http://localhost:8080";
 
 // Campo switch para verificar Si es VOD o no
 const esVODSwitch = ref(false);
