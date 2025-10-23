@@ -61,7 +61,19 @@ localStorage.removeItem('notasSEO');
  * @returns {string} Texto con los espacios alrededor de las comas eliminados
  */
 function limpiarEspacios(texto) {
-    return texto.replace(/\s*,\s*/g, ',');
+    try {
+      if(typeof texto !== "string" && (!Array.isArray(texto) && typeof texto !== "object")){
+        return "";
+      }
+
+      if(Array.isArray(texto)){
+        return texto.map(e => e.trim()).join(',').replace(/,/g, ',')?.toUpperCase();
+      }
+      
+      return texto.replace(/\s*,\s*/g, ',')?.toUpperCase();
+    } catch (error) {
+      return "";
+    }
 }
 
 /**
@@ -250,8 +262,8 @@ const principalData = async function () {
             noticia.subVertical = noticia.subseccion;
             noticia.selected = false;
             if(noticia.keywords){
-              noticia.keywords = limpiarEspacios(noticia.keywords.toUpperCase());
-              noticia.tags = limpiarEspacios(noticia.tags.toUpperCase());
+              noticia.keywords = limpiarEspacios(noticia.keywords);
+              noticia.tags = limpiarEspacios(noticia.tags);
             }
 
             if(noticia.url_communication){
