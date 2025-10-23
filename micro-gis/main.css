@@ -1268,3 +1268,6 @@ footer {
     height: 270px;
   }
 }
+.MODAL_modal_default {
+    display: none !important;
+}
