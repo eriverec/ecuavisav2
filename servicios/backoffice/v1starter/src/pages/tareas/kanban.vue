@@ -4,6 +4,7 @@ import { ref, onMounted, onUnmounted, reactive, computed } from 'vue';
 const tasks = ref([]);
 const team = ref([]);
 const selectedUser = ref('Luis');
+const currentUserEmail = ref('');
 const draggedTask = ref(null);
 const sourceColumn = ref(null);
 const isAddTaskDialogVisible = ref(false);
@@ -68,7 +69,16 @@ const showToast = (message, color = 'success') => {
 const fetchTasks = async () => {
   try {
     isLoading.value = true;
-    const response = await fetch(`https://n8n.fastcloudbox.cloud/webhook/tareas-ecuavisa?panel=${selectedUser.value}`);
+    
+    // Obtener el correo del usuario desde localStorage
+    const userDataString = localStorage.getItem('userData');
+    if (userDataString) {
+      const userData = JSON.parse(userDataString);
+      currentUserEmail.value = userData.email || '';
+    }
+    
+    // Endpoint fijo
+    const response = await fetch('https://n8n.fastcloudbox.cloud/webhook/tareas-ecuavisa?panel=Luis');
     const responseData = await response.json();
 
     // The actual data is in a stringified JSON inside the 'output' property.
@@ -90,27 +100,51 @@ const fetchTasks = async () => {
 };
 
 const organizeTasks = () => {
-  // Clear all columns
-  Object.keys(columns.value).forEach(col => {
-    columns.value[col] = [];
+  const allStatuses = ['Por hacer', 'En progreso', 'Revisión', 'Terminado', 'Aplazado', 'Cancelado'];
+  const newColumns = {};
+
+  allStatuses.forEach(status => {
+    newColumns[status] = [];
   });
-  
+
   tasks.value.forEach(task => {
-    const status = task.Estado.trim();
-    if (columns.value[status]) {
-      columns.value[status].push(task);
+    // Filtrar por correo del usuario actual
+    if (currentUserEmail.value) {
+      // Buscar el correo del responsable en el array team
+      const teamMember = team.value.find(member => 
+        member.Responsables.trim().toLowerCase() === task.Responsable.trim().toLowerCase()
+      );
+      
+      // Solo mostrar la tarea si el correo del responsable coincide con el usuario actual
+      // También verificar que el miembro del equipo tenga un correo asignado
+      if (teamMember && teamMember.Correo && teamMember.Correo.trim() !== '' && 
+          teamMember.Correo.trim().toLowerCase() === currentUserEmail.value.trim().toLowerCase()) {
+        
+        // Normalizar el estado para encontrarlo en las columnas (case-insensitive)
+        const taskStatus = task.Estado.trim();
+        const normalizedStatus = allStatuses.find(status => 
+          status.toLowerCase() === taskStatus.toLowerCase()
+        );
+        
+        if (normalizedStatus && newColumns[normalizedStatus]) {
+          newColumns[normalizedStatus].push(task);
+        }
+      }
+    } else {
+      // Si no hay correo del usuario actual, mostrar todas las tareas (fallback)
+      const taskStatus = task.Estado.trim();
+      const normalizedStatus = allStatuses.find(status => 
+        status.toLowerCase() === taskStatus.toLowerCase()
+      );
+      
+      if (normalizedStatus && newColumns[normalizedStatus]) {
+        newColumns[normalizedStatus].push(task);
+      }
     }
   });
-  
-  // Remove empty columns
-  const columnsToShow = {};
-  Object.keys(columns.value).forEach(col => {
-    if (columns.value[col].length > 0) {
-      columnsToShow[col] = columns.value[col];
-    }
-  });
-  columns.value = columnsToShow;
-  
+
+  columns.value = newColumns;
+
   // Update scroll indicator after organizing tasks
   setTimeout(() => {
     updateScrollIndicator();
@@ -118,20 +152,27 @@ const organizeTasks = () => {
 };
 
 const filteredColumns = computed(() => {
-  if (!searchQuery.value.trim()) {
+  const allStatuses = ['Por hacer', 'En progreso', 'Revisión', 'Terminado', 'Aplazado', 'Cancelado'];
+  const query = searchQuery.value.trim().toLowerCase();
+
+  if (!query) {
     return columns.value;
   }
-  
+
   const filtered = {};
-  Object.keys(columns.value).forEach(columnName => {
-    filtered[columnName] = columns.value[columnName].filter(task => 
-      task.Tarea.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      task.Proyecto.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      task.Módulo.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      task.Responsable.toLowerCase().includes(searchQuery.value.toLowerCase())
-    );
+  allStatuses.forEach(status => {
+    if (columns.value[status]) {
+      filtered[status] = columns.value[status].filter(task =>
+        task.Tarea.toLowerCase().includes(query) ||
+        task.Proyecto.toLowerCase().includes(query) ||
+        task.Módulo.toLowerCase().includes(query) ||
+        task.Responsable.toLowerCase().includes(query)
+      );
+    } else {
+      filtered[status] = [];
+    }
   });
-  
+
   return filtered;
 });
 
@@ -812,6 +853,17 @@ onUnmounted(() => {
             />
           </div>
         </div>
+
+        <div class="mb-4">
+          <label class="text-caption text-grey-darken-1 mb-2 d-block">Estado</label>
+          <VSelect
+            v-model="editTask.Estado"
+            :items="['Por hacer', 'En progreso', 'Revisión', 'Terminado', 'Aplazado', 'Cancelado']"
+            variant="outlined"
+            density="compact"
+            hide-details
+          />
+        </div>
         
         <div class="mb-4">
           <label class="text-caption text-grey-darken-1 mb-2 d-block">Comentario</label>
@@ -971,6 +1023,7 @@ onUnmounted(() => {
     
     .user-select {
       width: 200px;
+      display: none;
       
       @media (max-width: 768px) {
         width: 120px;
