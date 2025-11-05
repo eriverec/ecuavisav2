@@ -15,7 +15,8 @@ import esLocale from "moment/locale/es";
     // dataListArticles: { type: Array, required: true },  // Propiedad que recibe los datos
     limitKeywords: { type: String, default: 75 },  // Propiedad que recibe los datos
     selecteDisplay: { type: Boolean, required: true, default: true },
-    isLoadingWeb: { type: Boolean,  default: true } 
+    isLoadingWeb: { type: Boolean,  default: true },
+    height: { type: String, required: true, default: 583 },
   });
 
   const isLoadingWeb = ref(true);
@@ -23,7 +24,7 @@ import esLocale from "moment/locale/es";
   const keywordsAndArticles = ref([]);
   const words = ref([]);
   const width = ref(window.innerWidth * 0.53);  // 90% del ancho de pantalla
-  const height = ref(583); // 50% de la altura de pantalla
+  const height = ref(props.height + 350); // 50% de la altura de pantalla
   const limitKeywords = ref(15);
   let updateTimeout = null; // Variable para manejar el debounce
 
@@ -521,7 +522,7 @@ import esLocale from "moment/locale/es";
           />
         </template>
       </VCardItem>
-      <VCardText class="px-2 py-0 pb-2">
+      <VCardText class="px-2 py-0 pb-2" :style="{ 'min-height': `${props.height-60}px` }">
         <VRow v-if="keywordsAndArticles.length > 0">
           <VCol cols="12" sm="8" lg="8" class="pe-0">
             <svg id="wordCloud" v-if="keywordsAndArticles.length > 0 && !props.isLoadingWeb"></svg>
@@ -646,18 +647,7 @@ td {
 }
 
 @media (min-width: 992px) {
-	.text-world-code{
-    font-size: 0.6rem;
-    line-height: 1.2;
-  }
-  .sub-text-world-code{
-    font-size: 0.5rem;
-    line-height: 1.2;
-  }
-
-  .list-item-min-heigth-keyword{
-    min-height: 33px;
-  }
+	
 }
 
 /* Desktop */
@@ -672,5 +662,18 @@ td {
 /* Extra Large */
 @media (min-width: 1600px) {
 	
+}
+
+.text-world-code{
+  font-size: clamp(1rem, 2.1vw, 1.1rem);
+  line-height: 1.2;
+}
+.sub-text-world-code{
+  font-size: clamp(1rem, 2.1vw, 1.2rem);
+  line-height: 1.2;
+}
+
+.list-item-min-heigth-keyword{
+  min-height: 7vh;
 }
 </style>

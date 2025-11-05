@@ -169,7 +169,7 @@ const filteredDataModalKeyWord = computed(() => {
   */
 
 const currentPage = ref(1);
-const pageSize = ref(30); // Valor por defecto
+const pageSize = ref(10); // Valor por defecto
 
 watch(pageSize, () => {
 	currentPage.value = 1;
@@ -496,17 +496,13 @@ function procesarKeywordsAndTags(articles) {
 					<VRow :disabled="isLoading">
 						<VCol
 							cols="12"
-							sm="4"
+							sm="12"
 							class="py-0 pb-1 px-2"
-							v-for="(row, indexRow) in [0, 1, 2]"
 							:key="indexRow"
 						>
 							<VCard
 								class="article-card elevation-0 border rounded no-truncate mb-1 radar-card"
-								v-for="(item, index) in paginatedData.slice(
-									indexRow * 10,
-									(indexRow + 1) * 10
-								)"
+								v-for="(item, index) in paginatedData"
 								:key="item.enlace"
 							>
 								<VCardText class="d-flex align-top gap-2 px-1 py-1 px-0">
@@ -744,7 +740,7 @@ function procesarKeywordsAndTags(articles) {
 }
 
 .v-chip.v-chip--size-x-small {
-	--v-chip-height: 12px;
+	--v-chip-height: 15px;
 }
 
 .v-card .v-card-text {
@@ -755,170 +751,10 @@ function procesarKeywordsAndTags(articles) {
 	line-height: 1.2;
 }
 
-/* @media (max-width: 991px) {
-	.grupoTopInfo {
-		flex-direction: column;
-		align-items: flex-start;
-	}
-} */
 
-/* Ajustes responsivos */
-/* @media (max-width: 600px) {
-	.img-content {
-		min-width: 25px;
-		width: 25px;
-	}
-
-	.fixed-avatar {
-		width: 30px;
-		height: 30px;
-	}
-
-	.article-title {
-		font-size: 0.7rem;
-	}
-
-	.article-card .v-card-text {
-		padding: 8px;
-	}
-
-	.text-caption {
-		font-size: 0.55rem !important;
-	}
-
-	.v-chip.v-chip--size-x-small {
-		font-size: 0.55rem;
-	}
-
-	.botoncito {
-		font-size: 0.5rem !important;
-	}
-} */
-
-/* Card notas */
-/* Mobile - Base (sin media query) */
-
-/* Tablet - Landscape / Small Desktop */
-@media (min-width: 800px) {
-	/* image */
-	.radar-picture{
-		margin-right: 10px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
-
-	.radar-picture,
-	.radar-picture img{
-		width: 40px;
-		height: 40px;
-		display: block;
-	}
-
-	/* Titular */
-	.article-title{
-		font-size: 0.5rem;
-	}
-
-	/* Mas info */
-	.radar-vertical,
-	.radar-sitio,
-	.radar-tipo,
-	.radar-date,
-	.radar-autor{
-		font-size: 0.3rem!important;
-	}
-
-	/* Sitio */
-	.radar-sitio{
-		
-	}
-}
-
-@media (min-width: 992px) {
-	/* Card mas info */
-	.radar-content-info{
-		gap: 2px;
-	}
-	/* image */
-	.radar-picture{
-		margin-right: 15px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
-	.radar-picture,
-	.radar-picture img{
-		width: 50px;
-		height: 50px;
-		display: block;
-	}
-
-	/* Titular */
-	.article-title{
-		font-size: 0.7rem;
-		line-height: 1.2;
-		font-weight: 600;
-	}
-
-	/* Mas info */
-	.radar-vertical,
-	.radar-sitio,
-	.radar-tipo,
-	.radar-date,
-	.radar-autor{
-		font-size: 0.5rem!important;
-	}
-}
-
-/* Desktop */
-@media (min-width: 1200px) {
-}
-
-/* Large Desktop */
-@media (min-width: 1400px) {
-	
-}
-
-/* Extra Large */
-@media (min-width: 1600px) {
-	/* image */
-	.radar-picture{
-		margin-right: 15px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
-	.radar-picture,
-	.radar-picture img{
-		width: 60px;
-		height: 60px;
-		display: block;
-	}
-
-	/* Titular */
-	.article-title{
-		font-size: 1rem;
-		line-height: 1.2;
-		font-weight: 600;
-	}
-
-	/* Card mas info */
-	.radar-content-info{
-		gap: 10px;
-	}
-
-	.radar-vertical,
-	.radar-sitio,
-	.radar-tipo,
-	.radar-date,
-	.radar-autor{
-		font-size: 0.8rem!important;
-	}
-}
-
+/* Radar contenido notas */
 /* image */
-/* .radar-picture{
+.radar-picture{
 	margin-right: 15px;
 	display: flex;
 	align-items: center;
@@ -926,14 +762,28 @@ function procesarKeywordsAndTags(articles) {
 }
 .radar-picture,
 .radar-picture img{
-	width: 70px;
-	height: 70px;
-} */
+	width: 60px;
+	height: 60px;
+	display: block;
+}
 
 /* Titular */
-/* .article-title{
-	font-size: 0.9rem;
+.article-title{
+	font-size: clamp(1rem, 1.1vw, 1.1rem);
 	line-height: 1.2;
 	font-weight: 600;
-} */
+}
+
+/* Card mas info */
+.radar-content-info{
+	gap: 10px;
+}
+
+.radar-vertical,
+.radar-sitio,
+.radar-tipo,
+.radar-date,
+.radar-autor{
+	font-size: clamp(0.7rem, 0.7vw, 0.7rem)!important;
+}
 </style>

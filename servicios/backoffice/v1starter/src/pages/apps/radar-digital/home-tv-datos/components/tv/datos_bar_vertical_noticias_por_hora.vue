@@ -251,7 +251,7 @@
             show: true,
             style: { 
               colors: themeDisabledTextColor ,
-              fontSize: '12px',
+              fontSize: '15px',
             },
             formatter: function(value, timestamp, opts) {
               if(value){
@@ -452,7 +452,7 @@
           </template>
         </VCardItem>
 
-        <VCardText class="px-2 py-0">
+        <VCardText class="px-2 py-0" :style="{ 'min-height': `${props.height+10}px` }">
           <VueApexCharts
             v-if="articulosLocal.length > 0"
             :key="generarIDHora()"

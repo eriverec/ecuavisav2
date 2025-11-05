@@ -796,13 +796,13 @@ function obtenerHora() {
 		<VRow>
 			<VCol cols="12" md="12" lg="12">
 				<VCard>
-					<VCardItem class="py-1 px-2">
+					<VCardItem class="py-3 px-3">
 						<div class="d-flex content-title flex-wrap w-100">
 							<div class="d-flex gap-3 justify-space-between w-100">
 								<div class="d-flex flex-column">
 									<h4 class="title-principal">Últimas noticias</h4>
 									<div class="d-flex gap-2 align-center mt-0">
-										<small style="font-size: 10px"
+										<small style="font-size: 15px"
 											>Total de artículos procesados</small
 										>
 										<VChip size="x-small" color="primary">
@@ -983,4 +983,8 @@ function obtenerHora() {
 		margin-block-start: 0rem;
 	}
 } */
+
+ .title-principal{
+	font-size: 2vw;
+ }
 </style>
