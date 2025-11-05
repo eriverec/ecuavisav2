@@ -928,7 +928,7 @@ function obtenerHora() {
 						<datos_bar_vertical_noticias_por_hora
 							:articulos="dataAll"
 							:disabledAll="false"
-							:height="413"
+							:height="353"
 						/>
 					</VCol>
 				</VRow>

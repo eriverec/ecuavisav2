@@ -23,7 +23,7 @@ import esLocale from "moment/locale/es";
   const keywordsAndArticles = ref([]);
   const words = ref([]);
   const width = ref(window.innerWidth * 0.53);  // 90% del ancho de pantalla
-  const height = ref(window.innerHeight * 0.85); // 50% de la altura de pantalla
+  const height = ref(583); // 50% de la altura de pantalla
   const limitKeywords = ref(15);
   let updateTimeout = null; // Variable para manejar el debounce
 
@@ -499,59 +499,6 @@ import esLocale from "moment/locale/es";
 
 <template>
   <section>
-    <VDialog
-        v-model="isDialogVisibleChart1.modal"
-        scrollable
-        max-width="650"
-      >
-
-      <!-- Dialog close btn -->
-      <DialogCloseBtn @click="isDialogVisibleChart1.modal = !isDialogVisibleChart1.modal" />
-
-      <!-- Dialog Content -->
-      <VCard>
-        <VCardItem class="px-1 py-1">
-          <div class="d-flex content-title flex-wrap">
-            <div class="d-flex gap-3">
-              <div class="d-flex flex-column" style="line-height: 1.3;">
-                <h3 class="h2">
-                  {{ isDialogVisibleChart1.data.title }}
-                </h3>
-                <div class="d-flex gap-2 align-center mt-2">
-                  <small style="font-size: 10px;">Artículos</small>
-                  <VChip size="x-small" color="primary">
-                    {{ filteredDataModalChart1.length }} Artículo(s)
-                  </VChip>
-                </div>
-              </div>
-
-              
-            </div>
-
-            <VTextField v-model="isDialogVisibleChart1.data.search" label="Buscar.."
-              prepend-inner-icon="tabler-search" density="compact" style="max-width: 300px; padding: 0px 0;"
-              clearable />
-
-          </div>
-        </VCardItem>
-        <VCardText style="max-height: 450px;">
-          <VList lines="two" class="py-4">
-            <div v-if="filteredDataModalChart1.length">
-              
-            </div>
-            <div v-else>
-              <td colspan="4" class="no-results">No se encontraron resultados</td>
-            </div>
-          </VList>
-        </VCardText>
-
-        <VCardText class="py-4">
-          <VBtn class="my-4" @click="isDialogVisibleChart1.modal = false">
-            Cerrar modal.
-          </VBtn>
-        </VCardText>
-      </VCard>
-    </VDialog>
     <VCard >
       <VCardItem class="px-2 py-2">
         <VCardTitle>Palabras clave más Relevante</VCardTitle>
@@ -693,4 +640,37 @@ td {
 /* th {
   background-color: #f2f2f2;
 } */
+
+@media (min-width: 800px) {
+	
+}
+
+@media (min-width: 992px) {
+	.text-world-code{
+    font-size: 0.6rem;
+    line-height: 1.2;
+  }
+  .sub-text-world-code{
+    font-size: 0.5rem;
+    line-height: 1.2;
+  }
+
+  .list-item-min-heigth-keyword{
+    min-height: 33px;
+  }
+}
+
+/* Desktop */
+@media (min-width: 1200px) {
+}
+
+/* Large Desktop */
+@media (min-width: 1400px) {
+	
+}
+
+/* Extra Large */
+@media (min-width: 1600px) {
+	
+}
 </style>

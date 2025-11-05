@@ -643,43 +643,46 @@ function procesarKeywordsAndTags(articles) {
 							<VCard
 								class="article-card elevation-0 border rounded no-truncate"
 							>
-								<VCardText class="d-flex align-center gap-2 px-1 py-1">
+								<VCardText class="d-flex align-top gap-2 px-1 py-1 px-0">
 									<!-- Imagen -->
-									<div class="img-content">
+									<div class="img-content radar-picture">
 										<img
 											v-if="item.picture"
 											:src="replaceAmp(item.picture)"
 											class="fixed-avatar rounded"
 											alt="Article image"
 										/>
-										<VIcon v-else icon="tabler-news" size="30" />
+										<VIcon v-else icon="tabler-news" size="40" />
 									</div>
 
 									<!-- Contenido -->
-									<div class="article-content w-100">
+									<div class="article-content w-100 py-0">
 										<!-- Fila 1: medio, fecha y categoría -->
 										<div class="mb-0 grupoTopInfo">
-											<div class="article-meta d-flex align-center gap-2 mb-1">
+											<div class="article-meta d-flex align-center gap-2 mb-1 radar-content-info">
 												<VChip
 													variant="elevated"
 													size="x-small"
 													:color="item.color"
-													class="article-meta-v-chip"
+													class="article-meta-v-chip radar-sitio"
 												>
 													{{ item.sitio }}
 												</VChip>
-												<span class="text-caption v2-home">{{
+												<span class="text-caption v2-home radar-date">{{
 													formatDate(item.fechaPublicacion)
 												}}</span>
-												<VChip size="x-small" class="article-meta-v-chip">{{
-													item.vertical
-												}}</VChip>
-												<div class="autor-ec" title="Autor">
+												<VChip
+													v-if="item.vertical"
+													size="x-small"
+													class="article-meta-v-chip radar-vertical"
+													>{{ item.vertical }}</VChip
+												>
+												<div v-if="item.autor" class="autor-ec radar-autor" title="Autor">
 													<VIcon icon="tabler-user" size="10" />
 													<small>{{ item.autor }}</small>
 												</div>
 												<div
-													class="article-type-ec article-meta-v-chip"
+													class="article-type-ec article-meta-v-chip radar-tipo"
 													title="Tipo de artículo"
 													v-if="!props.modoSimple"
 												>
@@ -696,7 +699,7 @@ function procesarKeywordsAndTags(articles) {
 														.slice(0, 2)"
 													:key="keyword"
 													size="x-small"
-													class="mr-2"
+													class="mr-2 radar-keyword"
 													variant="outlined"
 													:color="item.color"
 												>
@@ -923,6 +926,164 @@ function procesarKeywordsAndTags(articles) {
 
 	.botoncito {
 		font-size: 0.5rem !important;
+	}
+}
+
+
+/* Tablet - Landscape / Small Desktop */
+@media (min-width: 800px) {
+	/* image */
+	.radar-picture{
+		margin-right: 10px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.radar-picture,
+	.radar-picture img{
+		width: 40px;
+		height: 40px;
+		display: block;
+	}
+
+	/* Titular */
+	.article-title{
+		font-size: 0.5rem;
+	}
+
+	/* Mas info */
+	.radar-vertical,
+	.radar-sitio,
+	.radar-tipo,
+	.radar-date,
+	.radar-autor{
+		font-size: 0.3rem!important;
+	}
+
+	/* Sitio */
+	.radar-sitio{
+		
+	}
+}
+
+@media (min-width: 992px) {
+	/* Card mas info */
+	.radar-content-info{
+		gap: 2px;
+	}
+	/* image */
+	.radar-picture{
+		margin-right: 15px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	.radar-picture,
+	.radar-picture img{
+		width: 50px;
+		height: 50px;
+		display: block;
+	}
+
+	/* Titular */
+	.article-title{
+		font-size: 0.7rem;
+		line-height: 1.2;
+		font-weight: 600;
+	}
+
+	/* Mas info */
+	.radar-vertical,
+	.radar-sitio,
+	.radar-tipo,
+	.radar-date,
+	.radar-autor{
+		font-size: 0.5rem!important;
+	}
+}
+
+
+
+@media (min-width: 1090px) {
+	/* Card mas info */
+	.radar-content-info{
+		gap: 2px;
+	}
+	/* image */
+	.radar-picture{
+		margin-right: 7px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	.radar-picture,
+	.radar-picture img{
+		width: 40px;
+		height: 40px;
+		display: block;
+	}
+
+	/* Titular */
+	.article-title{
+		font-size: 0.6rem;
+		line-height: 1.2;
+		font-weight: 600;
+	}
+
+	/* Mas info */
+	.radar-vertical,
+	.radar-sitio,
+	.radar-tipo,
+	.radar-date,
+	.radar-autor{
+		font-size: 0.4rem!important;
+	}
+}
+
+/* Desktop */
+@media (min-width: 1200px) {
+}
+
+/* Large Desktop */
+@media (min-width: 1400px) {
+	
+}
+
+/* Extra Large */
+@media (min-width: 1600px) {
+	/* image */
+	.radar-picture{
+		margin-right: 15px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	.radar-picture,
+	.radar-picture img{
+		width: 60px;
+		height: 60px;
+		display: block;
+	}
+
+	/* Titular */
+	.article-title{
+		font-size: 1rem;
+		line-height: 1.2;
+		font-weight: 600;
+	}
+
+	/* Card mas info */
+	.radar-content-info{
+		gap: 10px;
+	}
+
+	.radar-vertical,
+	.radar-sitio,
+	.radar-tipo,
+	.radar-date,
+	.radar-autor{
+		font-size: 0.8rem!important;
 	}
 }
 </style>
