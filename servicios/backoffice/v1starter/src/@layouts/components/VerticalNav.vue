@@ -43,7 +43,7 @@ const props = defineProps({
 })
 
 const refNav = ref()
-const { width: windowWidth } = useWindowSize()
+let { width: windowWidth } = useWindowSize()
 const isHovered = useElementHover(refNav)
 
 provide(injectionKeyIsVerticalNavHovered, isHovered)
@@ -77,6 +77,7 @@ onMounted(async () => {
   const shouldCollapse = sitios.some(sitio => 
     route.name.includes(sitio)
   );
+  // windowWidth.value = 1216;
   if(shouldCollapse){
     isCollapsed.value = true;
   }

@@ -799,7 +799,7 @@ function obtenerHora() {
 					<VCardItem class="py-1 px-2">
 						<div class="d-flex content-title flex-wrap w-100">
 							<div class="d-flex gap-3 justify-space-between w-100">
-								<div class="d-flex flex-column" style="line-height: 1.3">
+								<div class="d-flex flex-column">
 									<h4 class="title-principal">Últimas noticias</h4>
 									<div class="d-flex gap-2 align-center mt-0">
 										<small style="font-size: 10px"
