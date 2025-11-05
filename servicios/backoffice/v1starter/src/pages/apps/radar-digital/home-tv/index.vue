@@ -40,6 +40,5 @@ const screenWidth = ref(0)
 </script>
 
 <template>
-	<tv v-if="isTV" />
-	<web v-else />
+  <tv />
 </template>
