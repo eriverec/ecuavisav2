@@ -199,8 +199,6 @@ const principalData = async function () {
 		filtrosActivos.sitio = [];
 		filtrosActivos.seccion = [];
 		filtrosActivos.subseccion = [];
-		dataAll.value = [];
-		dataManipulable.value = [];
 
 		loadingData.value = true;
 
@@ -689,7 +687,10 @@ function procesarKeywordsAndTags(articles) {
  ******* FIN FILTRO pastelWordCloud
  */
 
+const isLoadingWeb = ref(true);
+
 async function initModulo() {
+	isLoadingWeb.value = true;
 	await principalData();
 	await loadSiteNames();
 
@@ -697,6 +698,7 @@ async function initModulo() {
 	itemsSitioWebSubSeccion.value = getUniqueSubVerticals(dataAll.value);
 
 	procesarKeywordsAndTags(dataAll.value);
+	isLoadingWeb.value = false;
 }
 
 onMounted(async () => {
@@ -708,6 +710,7 @@ onMounted(async () => {
 		const y = elemento.getBoundingClientRect().top + window.scrollY - 80; // 👈 resta 20px
 		window.scrollTo({ top: y, behavior: "smooth" });
 	}
+
 });
 
 function obtenerHora() {
@@ -719,6 +722,65 @@ function obtenerHora() {
 		// window.location.reload(); // Si deseas recargar la página
 	}, 1000 * 60 * 5);
 }
+
+
+// Variables reactivas
+// const windowWidth = ref(window.innerWidth)
+// const windowHeight = ref(window.innerHeight)
+
+// // Función para actualizar
+// const updateWindowSize = () => {
+//   windowWidth.value = window.innerWidth
+//   windowHeight.value = window.innerHeight
+// }
+
+// // Registrar y limpiar evento
+// onMounted(() => {
+//   window.addEventListener('resize', updateWindowSize)
+// })
+
+// onUnmounted(() => {
+//   window.removeEventListener('resize', updateWindowSize)
+// })
+
+/**TV PARECE QUE ES DE 1024 */
+/**Iphone parece que es de 600 */
+/**PC parece que es de 1280 */
+
+// const isTV = ref(false)
+
+// onMounted(() => {
+//   const userAgent = navigator.userAgent.toLowerCase()
+//   const screenWidth = window.innerWidth
+//   const screenHeight = window.innerHeight
+
+//   // Heurísticas comunes para TVs
+//   const tvPatterns = [
+//     'smart-tv',
+//     'smarttv',
+//     'appletv',
+//     'hbbtv',
+//     'netcast',
+//     'tizen',
+//     'webos',
+//     'viera',
+//     'aquos',
+//     'philips',
+//     'roku',
+//     'pov_tv',
+//     'aoc-tv',
+//     'tv safari',
+//   ]
+
+//   const isTVUA = tvPatterns.some(pattern => userAgent.includes(pattern))
+//   // Algunos TVs tienen pantallas grandes pero con poca densidad de píxeles
+//   const isLargeScreen = screenWidth <= 1030 && screenHeight >= 720
+
+//   // No suelen tener eventos táctiles
+//   const isNotTouch = !('ontouchstart' in window)
+
+//   isTV.value = isTVUA || (isLargeScreen && isNotTouch)
+// })
 </script>
 
 <template>
@@ -734,12 +796,12 @@ function obtenerHora() {
 		<VRow>
 			<VCol cols="12" md="12" lg="12">
 				<VCard>
-					<VCardItem class="py-2 px-2">
+					<VCardItem class="py-1 px-2">
 						<div class="d-flex content-title flex-wrap w-100">
 							<div class="d-flex gap-3 justify-space-between w-100">
 								<div class="d-flex flex-column" style="line-height: 1.3">
 									<h4 class="title-principal">Últimas noticias</h4>
-									<div class="d-flex gap-2 align-center mt-2">
+									<div class="d-flex gap-2 align-center mt-0">
 										<small style="font-size: 10px"
 											>Total de artículos procesados</small
 										>
@@ -850,46 +912,78 @@ function obtenerHora() {
 		</VRow>
 
 		<VRow id="content-padre">
-			<VCol cols="12" md="5" lg="5">
+			<VCol cols="12" md="12" lg="12" class="">
 				<VRow>
-					<VCol cols="12" sm="12" lg="12">
+					<VCol cols="12" sm="6" class="" v-if="!isLoadingWeb">
 						<pastelWordCloud
 							v-if="topKeywords.length > 0"
-							:limitKeywords="125"
+							:limitKeywords="205"
 							:data="allKeywords"
 							:dataTags="allTags"
 							:dataListArticles="dataAll"
+							:isLoadingWeb="isLoadingWeb"
 						/>
 					</VCol>
-					<VCol cols="12" md="12" lg="12">
+					<VCol cols="12" sm="6" class="" v-if="!isLoadingWeb">
 						<datos_bar_vertical_noticias_por_hora
 							:articulos="dataAll"
 							:disabledAll="false"
-							:height="310"
+							:height="413"
 						/>
 					</VCol>
 				</VRow>
 			</VCol>
-			<VCol cols="12" md="7" lg="7">
+			<!-- <VCol cols="12" md="12" lg="12" class="ps-0 pt-1" v-if="!isLoadingWeb">
 				<plantilla_articulos_estilo_principal
 					:articulos="filteredData"
 					:filtrosActivos="filtrosActivos"
 					:modoSimple="true"
 				/>
-			</VCol>
+			</VCol> -->
 		</VRow>
 	</section>
 </template>
 <style>
-.title-principal {
-	font-size: 25px;
+
+
+
+
+/* Normal */
+.title-principal{
+    font-size: 25px;
+  }
+
+.layout-content-width-boxed.layout-wrapper.layout-nav-type-vertical .layout-navbar,
+.layout-content-width-boxed .layout-page-content {
+    width: 100%!important;
+    max-width: 100%!important;
+    max-inline-size: 100%!important;
 }
 
-.layout-content-width-boxed.layout-wrapper.layout-nav-type-vertical
-	.layout-navbar,
-.layout-content-width-boxed .layout-page-content {
-	width: 100% !important;
-	max-width: 100% !important;
-	max-inline-size: 100% !important;
-}
+/* TV */
+/* @media (max-width: 1130px) and (min-width: 720px) {
+	.layout-navbar.navbar-blur {
+		display: none !important;
+	}
+	.title-principal {
+		font-size: 15px;
+	}
+
+	.layout-page-content{
+	padding-top: .5rem;
+	}
+
+	.layout-content-width-boxed.layout-wrapper.layout-nav-type-vertical
+		.layout-navbar,
+	.layout-content-width-boxed .layout-page-content {
+		width: 100% !important;
+		max-width: 100% !important;
+		max-inline-size: 100% !important;
+	}
+
+	.layout-wrapper.layout-nav-type-vertical.layout-navbar-sticky
+		.layout-page-content {
+		margin-block-start: 0rem;
+	}
+} */
 </style>

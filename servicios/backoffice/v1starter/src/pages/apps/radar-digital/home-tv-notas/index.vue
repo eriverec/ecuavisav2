@@ -1,6 +1,5 @@
 <script setup>
 import tv from './components/tv/index.vue'
-import web from './components/web/index.vue'
 import { useDeviceDetection } from './components/useDeviceDetection'
 const { isTV } = useDeviceDetection()
 const screenWidth = ref(0)
@@ -40,6 +39,5 @@ const screenWidth = ref(0)
 </script>
 
 <template>
-	<tv v-if="isTV" />
-	<web v-else />
+  <tv />
 </template>

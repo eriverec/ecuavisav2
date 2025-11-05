@@ -169,7 +169,7 @@ const filteredDataModalKeyWord = computed(() => {
   */
 
 const currentPage = ref(1);
-const pageSize = ref(10); // Valor por defecto
+const pageSize = ref(30); // Valor por defecto
 
 watch(pageSize, () => {
 	currentPage.value = 1;
@@ -418,146 +418,6 @@ function procesarKeywordsAndTags(articles) {
  */
 </script>
 <template>
-	<VDialog v-model="isDialogVisibleKeyWords.modal" scrollable max-width="650">
-		<!-- Dialog close btn -->
-		<DialogCloseBtn
-			@click="isDialogVisibleKeyWords.modal = !isDialogVisibleKeyWords.modal"
-		/>
-
-		<!-- Dialog Content -->
-		<VCard>
-			<VCardItem>
-				<div class="d-flex content-title flex-wrap">
-					<div class="d-flex gap-3">
-						<div class="d-flex flex-column" style="line-height: 1.3">
-							<h3 class="h2">
-								{{ isDialogVisibleKeyWords.data.title }}
-							</h3>
-							<div class="d-flex gap-2 align-center mt-2">
-								<small style="font-size: 10px">Artículos</small>
-								<VChip size="x-small" color="primary">
-									{{ filteredDataModalKeyWord.length }} Artículo(s)
-								</VChip>
-							</div>
-						</div>
-					</div>
-
-					<VTextField
-						v-model="isDialogVisibleKeyWords.data.search"
-						label="Buscar.."
-						prepend-inner-icon="tabler-search"
-						density="compact"
-						style="max-width: 300px; padding: 0px 0"
-						clearable
-					/>
-				</div>
-			</VCardItem>
-			<VCardText style="max-height: 550px">
-				<VList lines="two" class="py-4">
-					<div v-if="filteredDataModalKeyWord.length">
-						<VSelect
-							style="width: 170px"
-							v-model="pageSizeModalKeyWord"
-							:items="[10, 20, 100, 200, 500]"
-							label="Registros por página"
-							dense
-							outlined
-							class="mb-2 mt-5 d-block"
-						/>
-
-						<template v-for="item in paginatedDataModalKeyWord">
-							<VListItem
-								class="article-card elevation-0 border-1 rounded no-truncate px-4 py-2 mb-3"
-							>
-								<template #prepend>
-									<VAvatar
-										v-if="item.picture"
-										:image="replaceAmp(item.picture)"
-										size="64"
-										rounded
-									/>
-									<VIcon v-else icon="tabler-news" size="2" />
-								</template>
-								<VChip
-									v-if="item.sitio"
-									class="mb-2"
-									size="x-small"
-									color="dark"
-									>{{ item.sitio.toUpperCase() }}</VChip
-								>
-								<VTooltip location="top">
-									<template v-slot:activator="{ props }">
-										<VListItemTitle v-bind="props" class="text-truncate">
-											{{ item.title || item.titulo }}
-										</VListItemTitle>
-									</template>
-									<span>{{ item.title || item.titulo }}</span>
-								</VTooltip>
-								<VListItemSubtitle>
-									<div class="d-flex gap-2 align-center">
-										<span class="text-xs">{{
-											formatDate(item.fechaPublicacion) || "Sin fecha"
-										}}</span>
-										<VChip
-											v-if="item.subseccion"
-											class="ml-2"
-											size="small"
-											color="success"
-											>{{ item.subseccion }}</VChip
-										>
-										<small
-											style="font-size: 10px"
-											v-if="seccion == 'Últimas noticias'"
-											>Página: {{ item.seccion }}</small
-										>
-										<div
-											title="Autor"
-											class="align-center mt-1"
-											v-if="item.autor"
-											style="font-size: 12px"
-										>
-											<VIcon icon="tabler-user" size="15" />
-											<small style="margin-top: 5px">{{ item.autor }}</small>
-										</div>
-									</div>
-								</VListItemSubtitle>
-								<template #append>
-									<VBtn
-										:href="item.link"
-										target="_blank"
-										icon
-										variant="text"
-										size="small"
-									>
-										<VIcon icon="tabler-external-link" />
-									</VBtn>
-								</template>
-							</VListItem>
-						</template>
-						<VPagination
-							class="mt-5"
-							v-model="currentPageModalKeyWord"
-							:length="
-								Math.ceil(
-									filteredDataModalKeyWord.length / pageSizeModalKeyWord
-								)
-							"
-							total-visible="5"
-						/>
-					</div>
-					<div v-else>
-						<td colspan="4" class="no-results">No se encontraron resultados</td>
-					</div>
-				</VList>
-			</VCardText>
-
-			<VCardText class="py-4">
-				<VBtn class="my-4" @click="isDialogVisibleKeyWords.modal = false">
-					Cerrar modal.
-				</VBtn>
-			</VCardText>
-		</VCard>
-	</VDialog>
 	<VRow>
 		<VCol cols="12" md="12" lg="12" class="pb-0">
 			<VCard
@@ -631,17 +491,23 @@ function procesarKeywordsAndTags(articles) {
 
 				<VCardText
 					v-if="paginatedData.length > 0"
-					:class="props.modoSimple ? 'px-2' : ''"
+					:class="props.modoSimple ? 'px-2 py-3' : 'py-3'"
 				>
 					<VRow :disabled="isLoading">
 						<VCol
 							cols="12"
+							sm="4"
 							class="py-0 pb-1"
-							v-for="(item, index) in paginatedData"
-							:key="item.enlace"
+							v-for="(row, indexRow) in [0, 1, 2]"
+							:key="indexRow"
 						>
 							<VCard
-								class="article-card elevation-0 border rounded no-truncate"
+								class="article-card elevation-0 border rounded no-truncate mb-1"
+								v-for="(item, index) in paginatedData.slice(
+									indexRow * 10,
+									(indexRow + 1) * 10
+								)"
+								:key="item.enlace"
 							>
 								<VCardText class="d-flex align-center gap-2 px-1 py-1">
 									<!-- Imagen -->

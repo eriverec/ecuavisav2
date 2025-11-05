@@ -23,7 +23,7 @@ import esLocale from "moment/locale/es";
   const keywordsAndArticles = ref([]);
   const words = ref([]);
   const width = ref(window.innerWidth * 0.53);  // 90% del ancho de pantalla
-  const height = ref(window.innerHeight * 0.65); // 50% de la altura de pantalla
+  const height = ref(window.innerHeight * 0.85); // 50% de la altura de pantalla
   const limitKeywords = ref(15);
   let updateTimeout = null; // Variable para manejar el debounce
 
@@ -580,7 +580,7 @@ import esLocale from "moment/locale/es";
             <svg id="wordCloud" v-if="keywordsAndArticles.length > 0 && !props.isLoadingWeb"></svg>
           </VCol>
           <VCol cols="12" sm="4" lg="4" class="ps-0">
-            <div v-for="(keyword, index) of (keywordsAndArticles.slice(0, 6))" :key="index">
+            <div v-for="(keyword, index) of (keywordsAndArticles.slice(0, 8))" :key="index">
               <VListItem class="list-item-min-heigth-keyword px-1">
                 <template #prepend>
                   <VAvatar
@@ -624,7 +624,7 @@ import esLocale from "moment/locale/es";
   }
 </style>
 <style scoped>
-.sectionprimicias .v-card-item {
+/* .sectionprimicias .v-card-item {
   font-size: 24px;
 }
 
@@ -645,11 +645,10 @@ table {
 .board-content {
   height: 500px;
   overflow-y: auto;
-}
+} */
 
-th,
+/* th,
 td {
-  /* border: 1px solid #ddd; */
   padding: 8px;
   text-align: left;
 }
@@ -690,7 +689,7 @@ td {
 
 .v-list-item__prepend > .v-avatar {
     margin-inline-end: 5px;
-}
+} */
 /* th {
   background-color: #f2f2f2;
 } */

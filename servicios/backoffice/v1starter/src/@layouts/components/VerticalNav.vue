@@ -72,6 +72,16 @@ watch(() => route.name, () => {
   props.toggleIsOverlayNavActive(false)
 })
 
+onMounted(async () => {
+	const sitios = ['apps-radar-digital'];
+  const shouldCollapse = sitios.some(sitio => 
+    route.name.includes(sitio)
+  );
+  if(shouldCollapse){
+    isCollapsed.value = true;
+  }
+});
+
 const isVerticalNavScrolled = ref(false)
 const updateIsVerticalNavScrolled = val => isVerticalNavScrolled.value = val
 

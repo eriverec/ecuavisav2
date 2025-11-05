@@ -47,11 +47,11 @@ const customColors = [
 	"#ffe802",
 	"#836af9",
 	"#2c9aff",
-	"#ffcf5c",
+	// "#ffcf5c",
 	"#4f5d70",
 	"#299aff",
-	"#d4e157",
-	"#28dac6",
+	// "#d4e157",
+	// "#28dac6",
 	"#9e69fd",
 	"#ff9800",
 	"#26c6da",
@@ -687,7 +687,10 @@ function procesarKeywordsAndTags(articles) {
  ******* FIN FILTRO pastelWordCloud
  */
 
+const isLoadingWeb = ref(true);
+
 async function initModulo() {
+	isLoadingWeb.value = true;
 	await principalData();
 	await loadSiteNames();
 
@@ -695,6 +698,7 @@ async function initModulo() {
 	itemsSitioWebSubSeccion.value = getUniqueSubVerticals(dataAll.value);
 
 	procesarKeywordsAndTags(dataAll.value);
+	isLoadingWeb.value = false;
 }
 
 onMounted(async () => {
@@ -706,6 +710,7 @@ onMounted(async () => {
 		const y = elemento.getBoundingClientRect().top + window.scrollY - 80; // 👈 resta 20px
 		window.scrollTo({ top: y, behavior: "smooth" });
 	}
+
 });
 
 function obtenerHora() {
@@ -717,6 +722,7 @@ function obtenerHora() {
 		// window.location.reload(); // Si deseas recargar la página
 	}, 1000 * 60 * 5);
 }
+
 
 // Variables reactivas
 // const windowWidth = ref(window.innerWidth)
@@ -823,7 +829,7 @@ function obtenerHora() {
 										size="small"
 										prepend-icon="tabler-clock"
 									>
-										Datos: {{ lastUpdate.fechai }}, {{ lastUpdate.fechaf }}
+										Última actualización: {{ lastUpdate.fechaf }}
 									</VChip>
 									<VChip
 										class="d-none"
@@ -908,16 +914,17 @@ function obtenerHora() {
 		<VRow id="content-padre">
 			<VCol cols="12" md="5" lg="5" class="">
 				<VRow>
-					<VCol cols="12" sm="12" lg="12" class="pt-1">
+					<VCol cols="12" sm="12" lg="12" class="pt-1" v-if="!isLoadingWeb">
 						<pastelWordCloud
 							v-if="topKeywords.length > 0"
-							:limitKeywords="125"
+							:limitKeywords="105"
 							:data="allKeywords"
 							:dataTags="allTags"
 							:dataListArticles="dataAll"
+							:isLoadingWeb="isLoadingWeb"
 						/>
 					</VCol>
-					<VCol cols="12" md="12" lg="12" class="pt-0">
+					<VCol cols="12" md="12" lg="12" class="pt-0" v-if="!isLoadingWeb">
 						<datos_bar_vertical_noticias_por_hora
 							:articulos="dataAll"
 							:disabledAll="false"
@@ -926,7 +933,7 @@ function obtenerHora() {
 					</VCol>
 				</VRow>
 			</VCol>
-			<VCol cols="12" md="7" lg="7" class="ps-0 pt-1">
+			<VCol cols="12" md="7" lg="7" class="ps-0 pt-1" v-if="!isLoadingWeb">
 				<plantilla_articulos_estilo_principal
 					:articulos="filteredData"
 					:filtrosActivos="filtrosActivos"
@@ -954,7 +961,7 @@ function obtenerHora() {
 }
 
 /* TV */
-@media (max-width: 1130px) and (min-width: 720px) {
+/* @media (max-width: 1130px) and (min-width: 720px) {
 	.layout-navbar.navbar-blur {
 		display: none !important;
 	}
@@ -978,5 +985,5 @@ function obtenerHora() {
 		.layout-page-content {
 		margin-block-start: 0rem;
 	}
-}
+} */
 </style>
