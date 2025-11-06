@@ -24,7 +24,7 @@ import esLocale from "moment/locale/es";
   const keywordsAndArticles = ref([]);
   const words = ref([]);
   const width = ref(window.innerWidth * 0.53);  // 90% del ancho de pantalla
-  const height = ref(props.height + 350); // 50% de la altura de pantalla
+  const height = ref(props.height * 1.45); // 50% de la altura de pantalla
   const limitKeywords = ref(15);
   let updateTimeout = null; // Variable para manejar el debounce
 
@@ -522,13 +522,14 @@ import esLocale from "moment/locale/es";
           />
         </template>
       </VCardItem>
-      <VCardText class="px-2 py-0 pb-2" :style="{ 'min-height': `${props.height-60}px` }">
+      <VCardText class="px-2 py-0 pb-2" :style="{ 'min-height': `${props.height}px` }" id="wordCloudContainer">
         <VRow v-if="keywordsAndArticles.length > 0">
           <VCol cols="12" sm="8" lg="8" class="pe-0">
+            
             <svg id="wordCloud" v-if="keywordsAndArticles.length > 0 && !props.isLoadingWeb"></svg>
           </VCol>
           <VCol cols="12" sm="4" lg="4" class="ps-0">
-            <div v-for="(keyword, index) of (keywordsAndArticles.slice(0, 8))" :key="index">
+            <div v-for="(keyword, index) of (keywordsAndArticles.slice(0, 7))" :key="index">
               <VListItem class="list-item-min-heigth-keyword px-1">
                 <template #prepend>
                   <VAvatar
@@ -665,7 +666,7 @@ td {
 }
 
 .text-world-code{
-  font-size: clamp(1rem, 2.1vw, 1.1rem);
+  font-size: clamp(0.7rem, 2vw, 1rem);
   line-height: 1.2;
 }
 .sub-text-world-code{

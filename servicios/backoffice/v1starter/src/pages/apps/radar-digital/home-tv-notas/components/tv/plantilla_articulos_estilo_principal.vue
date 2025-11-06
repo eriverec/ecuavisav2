@@ -629,7 +629,7 @@ function procesarKeywordsAndTags(articles) {
 					</VRow>
 
 					<VPagination
-						class="mt-5 d-none"
+						class="mt-5"
 						v-model="currentPage"
 						:length="Math.ceil(filteredData.length / pageSize)"
 						total-visible="5"
@@ -762,14 +762,23 @@ function procesarKeywordsAndTags(articles) {
 }
 .radar-picture,
 .radar-picture img{
-	width: 60px;
-	height: 60px;
+	width: 70px;
+	height: 70px;
 	display: block;
+	position: relative;
+}
+
+.img-content svg{
+	display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 /* Titular */
 .article-title{
-	font-size: clamp(1rem, 1.1vw, 1.1rem);
+	font-size: clamp(1.2rem, 1.4vw, 1.4rem);
 	line-height: 1.2;
 	font-weight: 600;
 }
@@ -784,6 +793,6 @@ function procesarKeywordsAndTags(articles) {
 .radar-tipo,
 .radar-date,
 .radar-autor{
-	font-size: clamp(0.7rem, 0.7vw, 0.7rem)!important;
+	font-size: clamp(0.8rem, 0.8vw, 0.8rem)!important;
 }
 </style>

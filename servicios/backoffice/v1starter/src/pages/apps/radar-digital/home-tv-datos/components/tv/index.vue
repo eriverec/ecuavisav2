@@ -784,8 +784,11 @@ function obtenerHora() {
 const heightScreen = ref(0)
 
 onMounted(() => {
-  heightScreen.value = window.innerHeight
+  heightScreen.value = (window.innerHeight - (window.innerHeight * 0.3)).toFixed(2);
 })
+
+// document.querySelector('#content-padre').offsetHeight
+
 
 </script>
 
@@ -928,14 +931,14 @@ onMounted(() => {
 							:dataTags="allTags"
 							:dataListArticles="dataAll"
 							:isLoadingWeb="isLoadingWeb"
-							:height="heightScreen - 250"
+							:height="heightScreen"
 						/>
 					</VCol>
 					<VCol cols="12" sm="6" class="" v-if="!isLoadingWeb">
 						<datos_bar_vertical_noticias_por_hora
 							:articulos="dataAll"
 							:disabledAll="false"
-							:height="heightScreen - 320"
+							:height="heightScreen"
 						/>
 					</VCol>
 				</VRow>
