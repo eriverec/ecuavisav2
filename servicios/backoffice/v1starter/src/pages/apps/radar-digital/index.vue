@@ -33,24 +33,24 @@ const filtrosActivos = reactive({
 });
 
 const customColors = [
-  '#ffe802',
-  '#836af9',
-  '#2c9aff',
-  '#ffcf5c',
-  '#4f5d70',
-  '#299aff',
-  '#d4e157',
-  '#28dac6',
-  '#9e69fd',
-  '#ff9800',
-  '#26c6da',
-  '#ff8131',
-  '#28c76f',
-  '#ffbd1f',
-  '#84d0ff',
-  '#edf1f4',
-  '#ff9f43',
-]
+	"#ffe802",
+	"#836af9",
+	"#2c9aff",
+	// "#ffcf5c",
+	"#4f5d70",
+	"#299aff",
+	// "#d4e157",
+	// "#28dac6",
+	"#9e69fd",
+	"#ff9800",
+	"#26c6da",
+	"#ff8131",
+	"#28c76f",
+	"#ffbd1f",
+	"#84d0ff",
+	"#edf1f4",
+	"#ff9f43",
+];
 
 const loadingData = ref(false);
 
