@@ -136,11 +136,11 @@ const periodicidadItems = [
 const tipoPagoItems = [
 	{
 		title: "Pago único",
-		value: "pago unico",
+		value: "unico",
 	},
 	{
-		title: "Recursivo",
-		value: "Recursivo",
+		title: "Recurrente",
+		value: "recurrente",
 	},
 ];
 
