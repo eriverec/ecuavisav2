@@ -127,64 +127,64 @@ const countUsers = () => {
   userListStore
     .countUsers()
     .then((response) => {
-      const pE = ref(0);
-      const pF = ref(0);
-      const pG = ref(0);
-      const pA = ref(0);
+      // Extraer datos de la nueva estructura de la API
+      const providers = response.data.providers;
+      
+      // Función helper para encontrar datos de un provider
+      const getProviderData = (providerName) => {
+        const provider = providers.find(p => p.provider === providerName);
+        return provider ? { total: provider.total, percentage: parseFloat(provider.percentage) } : { total: 0, percentage: 0 };
+      };
 
-      const pAppE = ref(0);
-      const pAppF = ref(0);
-      const pAppG = ref(0);
-      const pAppA = ref(0);
+      // Obtener datos de providers web
+      const emailData = getProviderData('email');
+      const facebookData = getProviderData('facebook');
+      const googleData = getProviderData('google');
+      const appleData = getProviderData('apple');
 
-      totalUsers.value = (response.data.totalEmail) + (response.data.totalFacebook) + (response.data.totalGoogle) + (response.data.totalApple);
-      totalEmail.value = response.data.totalEmail;
-      totalFacebook.value = response.data.totalFacebook;
-      totalGoogle.value = response.data.totalGoogle;
-      totalApple.value = response.data.totalApple;
+      // Obtener datos de providers app
+      const appEmailData = getProviderData('app-client-email');
+      const appFacebookData = getProviderData('app-client-facebook');
+      const appGoogleData = getProviderData('app-client-google');
+      const appAppleData = getProviderData('app-client-apple');
 
-      //DATOS DE APP
-      totalAppUsers.value = (response.data.totalAppEmail) + (response.data.totalAppGoogle) + (response.data.totalAppFacebook) + (response.data.totalAppApple);
-      totalAppEmail.value = response.data.totalAppEmail;
-      totalAppFacebook.value = response.data.totalAppFacebook;
-      totalAppGoogle.value = response.data.totalAppGoogle;
-      totalAppApple.value = response.data.totalAppApple;
+      // Asignar totales web
+      totalEmail.value = emailData.total;
+      totalFacebook.value = facebookData.total;
+      totalGoogle.value = googleData.total;
+      totalApple.value = appleData.total;
 
-      let total = totalUsers.value;
+      // Asignar totales app
+      totalAppEmail.value = appEmailData.total;
+      totalAppFacebook.value = appFacebookData.total;
+      totalAppGoogle.value = appGoogleData.total;
+      totalAppApple.value = appAppleData.total;
 
-      let totalApp = totalAppUsers.value;
+      // Calcular totales web y app
+      const total = totalEmail.value + totalFacebook.value + totalGoogle.value + totalApple.value;
+      totalUsers.value = total;
+      totalAppUsers.value = totalAppEmail.value + totalAppGoogle.value + totalAppFacebook.value + totalAppApple.value;
 
-      totalDevicesEmail.value = (response.data.totalEmail) + (response.data.totalAppEmail);
-      totalDevicesFacebook.value = (response.data.totalFacebook) + (response.data.totalAppFacebook);
-      totalDevicesGoogle.value = (response.data.totalGoogle) + (response.data.totalAppGoogle);
-      totalDevicesApple.value = (response.data.totalApple) + (response.data.totalAppApple);
+      // Calcular totales por dispositivo (web + app)
+      totalDevicesEmail.value = totalEmail.value + totalAppEmail.value;
+      totalDevicesFacebook.value = totalFacebook.value + totalAppFacebook.value;
+      totalDevicesGoogle.value = totalGoogle.value + totalAppGoogle.value;
+      totalDevicesApple.value = totalApple.value + totalAppApple.value;
 
-      totalDevicesUser.value = (totalDevicesEmail.value) + (totalDevicesFacebook.value) + (totalDevicesGoogle.value) + (totalDevicesApple.value);
+      // Total general de dispositivos
+      totalDevicesUser.value = totalDevicesEmail.value + totalDevicesFacebook.value + totalDevicesGoogle.value + totalDevicesApple.value;
 
-      pE.value = (totalEmail.value * 100) / total;
-      percentEmail.value = Math.round((pE.value + Number.EPSILON) * 100) / 100;
+      // Usar porcentajes directamente de la API (web)
+      percentEmail.value = emailData.percentage;
+      percentFacebook.value = facebookData.percentage;
+      percentGoogle.value = googleData.percentage;
+      percentApple.value = appleData.percentage;
 
-      pF.value = (totalFacebook.value * 100) / total;
-      percentFacebook.value = Math.round((pF.value + Number.EPSILON) * 100) / 100;
-
-      pG.value = (totalGoogle.value * 100) / total;
-      percentGoogle.value = Math.round((pG.value + Number.EPSILON) * 100) / 100;
-
-      pA.value = (totalApple.value * 100) / total;
-      percentApple.value = Math.round((pA.value + Number.EPSILON) * 100) / 100;
-
-      //DATOS DE APP
-      pAppE.value = (totalAppEmail.value * 100) / totalApp;
-      percentAppEmail.value = Math.round((pAppE.value + Number.EPSILON) * 100) / 100;
-
-      pAppF.value = (totalAppFacebook.value * 100) / totalApp;
-      percentAppFacebook.value = Math.round((pAppF.value + Number.EPSILON) * 100) / 100;
-
-      pAppG.value = (totalAppGoogle.value * 100) / totalApp;
-      percentAppGoogle.value = Math.round((pAppG.value + Number.EPSILON) * 100) / 100;
-
-      pAppA.value = (totalAppApple.value * 100) / totalApp;
-      percentAppApple.value = Math.round((pAppA.value + Number.EPSILON) * 100) / 100;
+      // Usar porcentajes directamente de la API (app)
+      percentAppEmail.value = appEmailData.percentage;
+      percentAppFacebook.value = appFacebookData.percentage;
+      percentAppGoogle.value = appGoogleData.percentage;
+      percentAppApple.value = appAppleData.percentage;
 
       isLoading.value = false;
 
@@ -192,7 +192,7 @@ const countUsers = () => {
 
     })
     .catch((error) => {
-      console.error(error);
+      console.error('Error al obtener estadísticas de usuarios:', error);
     });
 };
 const route = useRoute()

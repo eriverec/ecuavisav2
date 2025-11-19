@@ -13,7 +13,7 @@ export const useUserListStore = defineStore('UserListStore', {
 
     fetchFullUsers(p) { return axios.get(`https://data.mongodb-api.com/app/backoffice1-usyys/endpoint/fullUsers?page=${p}`) },
 
-    countUsers() { return axios.get('https://data.mongodb-api.com/app/backoffice1-usyys/endpoint/count') },
+    countUsers() { return axios.get('https://usuarios-backoffice.vercel.app/count/all-providers') },
 
     // 👉 Add User
     addUser(userData) {
