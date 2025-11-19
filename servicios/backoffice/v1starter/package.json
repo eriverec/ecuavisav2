@@ -23,6 +23,7 @@
         "d3": "^7.9.0",
         "d3-cloud": "^1.2.7",
         "eslint-import-resolver-alias": "^1.1.2",
+        "frappe-gantt": "^1.0.4",
         "jsonwebtoken": "^9.0.2",
         "jwt-decode": "^3.1.2",
         "moment": "^2.29.4",
