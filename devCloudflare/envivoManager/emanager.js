@@ -1398,8 +1398,9 @@ function horarioSorteo2026() {
   const fondito = document.querySelector('#fondito__reprise');
   const programacion = document.querySelector('#programacion');
   const titulo_ = document.querySelector('.title_programa_reprise');
+  const btnTelevistazo7pm = document.getElementById('btnTelevistazo7pm');
 
-
+  btnTelevistazo7pm.style.display = 'block';
   programacion.style.marginBottom = '1.5rem'
   titulo_.style.textAlign = 'center'
   contenido_visible_player.style.display = 'block';
