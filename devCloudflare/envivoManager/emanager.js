@@ -1386,3 +1386,51 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Fallback con setTimeout para casos donde DOMContentLoaded ya pasó
 setTimeout(inicializarPagina, 500);
+
+
+
+
+
+// SORTEO MUNDIAL 2026 - INICIO
+
+function horarioSorteo2026() {
+  const contenido_visible_player = document.querySelector('.contenido_visible_player');
+  const fondito = document.querySelector('#fondito__reprise');
+  const programacion = document.querySelector('#programacion');
+  const titulo_ = document.querySelector('.title_programa_reprise');
+
+
+  programacion.style.marginBottom = '1.5rem'
+  titulo_.style.textAlign = 'center'
+  contenido_visible_player.style.display = 'block';
+  fondito.style.display = 'none';
+}
+
+// -------------------- para el envivo produccion----------------
+function modificarBotones() {
+  const btnTelcomunidad = document.getElementById('btnTelcomunidad');
+  btnTelcomunidad.style.display = 'block';
+  
+  // Modificar el segundo enlace
+  const btnQuito = document.querySelector('#btnTelcomunidad .btn-quito');
+  btnQuito.href = '/envivo/sorteo-mundial-2026'; 
+  btnQuito.textContent = 'Sorteo Mundial 2026'; 
+}
+
+setTimeout(() => {
+  // Ejecutar la función
+  if (window.location.pathname === '/envivo'){
+    // modificarBotones();
+  }
+}, 700);
+
+
+if (window.location.pathname === '/envivo/sorteo-mundial-2026') {
+  // Ejecutar la función inmediatamente
+  setTimeout(() => {
+    horarioSorteo2026();
+  }, 500);
+
+}
+
+
