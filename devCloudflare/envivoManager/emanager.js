@@ -1415,7 +1415,7 @@ function modificarBotones() {
   // Modificar el segundo enlace
   const btnQuito = document.querySelector('#btnTelcomunidad .btn-quito');
   btnQuito.href = '/sorteo-mundial-fifa-2026-grupo-ecuador-en-vivo'; 
-  btnQuito.textContent = 'Sorteo Mundial 2026'; 
+  btnQuito.textContent = 'Sorteo del Mundial FIFA 2026'; 
 }
 
 setTimeout(() => {
