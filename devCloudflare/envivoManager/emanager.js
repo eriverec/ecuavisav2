@@ -1414,7 +1414,7 @@ function modificarBotones() {
   
   // Modificar el segundo enlace
   const btnQuito = document.querySelector('#btnTelcomunidad .btn-quito');
-  btnQuito.href = '/envivo/sorteo-mundial-2026'; 
+  btnQuito.href = '/sorteo-mundial-fifa-2026-grupo-ecuador-en-vivo'; 
   btnQuito.textContent = 'Sorteo Mundial 2026'; 
 }
 
@@ -1426,7 +1426,7 @@ setTimeout(() => {
 }, 700);
 
 
-if (window.location.pathname === '/envivo/sorteo-mundial-2026') {
+if (window.location.pathname === '/sorteo-mundial-fifa-2026-grupo-ecuador-en-vivo') {
   // Ejecutar la función inmediatamente
   setTimeout(() => {
     horarioSorteo2026();
