@@ -1,0 +1,25 @@
+{
+  "fecha_actualizacion": "2025-12-04T10:20:32.693061",
+  "redes_sociales": [
+    {
+      "nombre": "Facebook",
+      "seguidores": "4.7M",
+      "url": "https://www.facebook.com/ecuavisa/"
+    },
+    {
+      "nombre": "YouTube",
+      "seguidores": "2M",
+      "url": "https://www.youtube.com/channel/UCRUV3nUNSc-xpBrTwQOCQQg"
+    },
+    {
+      "nombre": "Instagram",
+      "seguidores": "2M",
+      "url": "https://www.instagram.com/ecuavisatv/"
+    },
+    {
+      "nombre": "TikTok",
+      "seguidores": "1.7M",
+      "url": "https://www.tiktok.com/@ecuavisa.noticias"
+    }
+  ]
+}

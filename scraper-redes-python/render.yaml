@@ -1,0 +1,7 @@
+services:
+  - type: cron
+    name: scraper-redes-sociales
+    env: python
+    schedule: "0 0 * * *"  # Ejecutar diariamente a medianoche
+    buildCommand: pip install -r requirements.txt
+    startCommand: python scraper.py
