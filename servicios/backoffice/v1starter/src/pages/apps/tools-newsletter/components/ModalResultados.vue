@@ -285,7 +285,7 @@ watch(() => props.filtros, () => {
                     :key="indexNota"
                     :item="itemNota"
                     :seleccionado="itemsSeleccionados.some(
-                      selectedItem => selectedItem.info?.link?.url === itemNota.info?.link?.url
+                      selectedItem => selectedItem.info?.link?.internal === itemNota.info?.link?.internal
                     )"
                     :guardando-seleccionado="guardandoSeleccionado"
                     @seleccionar="handleSeleccionar"

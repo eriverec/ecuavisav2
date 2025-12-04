@@ -1,6 +1,8 @@
 <script setup>
 import { computed } from "vue";
 
+const dominio_prod = ref('https://dev.d25bogixxt74yq.amplifyapp.com');
+
 // Props con TypeScript-like definitions
 const props = defineProps({
 	item: {
@@ -52,7 +54,7 @@ const imagenAlt = computed(() => {
 });
 
 const url = computed(() => {
-	return props.item.info?.link?.url || "#";
+	return `${dominio_prod.value}${props.item.info?.link?.url}` || "#";
 });
 
 // Métodos

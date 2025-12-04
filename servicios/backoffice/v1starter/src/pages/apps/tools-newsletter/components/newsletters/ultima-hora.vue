@@ -2,6 +2,7 @@
 import SeleccionadorManager from "../SeleccionadorManager.vue";
 import AlertDialog from "../alert.vue";
 
+const dominio_prod = ref('https://dev.d25bogixxt74yq.amplifyapp.com');
 // Nombre del newsletter
 const newsletter = ref("boletin-ultimahora");
 const newsletterTitle = ref("Última hora");
@@ -85,6 +86,10 @@ const handleGuardarItems = async (items) => {
     //   body: JSON.stringify({ items })
     // })
 	if(!newsletter.value){
+		throw new Error('No se proporciono un newsletter');
+	}
+
+	if(!Array.isArray(items)){
 		throw new Error('No se proporciono un newsletter');
 	}
 

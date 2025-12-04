@@ -2,6 +2,7 @@
 import SeleccionadorManager from "../SeleccionadorManager.vue";
 import AlertDialog from "../alert.vue";
 
+const dominio_prod = ref('https://dev.d25bogixxt74yq.amplifyapp.com');
 // Nombre del newsletter
 const newsletter = ref("boletin-diario-5pm");
 const newsletterTitle = ref("Ecuavisa Informa 5PM");
@@ -69,6 +70,7 @@ const getItemsServer = async (newsletter = "") => {
 };
 
 // Manejar guardado de items
+
 const handleGuardarItems = async (items) => {
   loadingGeneral.value = true
   
@@ -87,6 +89,18 @@ const handleGuardarItems = async (items) => {
 	if(!newsletter.value){
 		throw new Error('No se proporciono un newsletter');
 	}
+
+	if(!Array.isArray(items)){
+		throw new Error('No se proporciono un newsletter');
+	}
+
+	// items = items.map(n => {
+	// 	const newItem = { ...n };
+	// 	if (newItem?.info?.link?.url) {
+	// 		newItem.info.link.url = `${dominio_prod.value}${newItem.info.link.url}`;
+	// 	}
+	// 	return newItem;
+	// });
 
 	// Aquí llamas a tu endpoint
 	const response = await fetch('https://micuenta.ecuavisa.com/servicio-php-newsletter-cms-react/newsletter/add.php', {
