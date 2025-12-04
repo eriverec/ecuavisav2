@@ -88,7 +88,7 @@ const isDialogVisible = ref(false)
 								<VRow>
 									<VCol cols="12" lg="10" class="mx-auto my-8 align-items-center" >
 										<VRow>
-											<VCol cols="12" md="6" center >
+											<VCol cols="12" md="4" center >
 												<VCard  flat  border class=" cursor-pointer"  @click="$router.push({ name: 'apps-apicustom' })" >
 													<VCardText class="text-center">
 														<VAvatar rounded size="70" color="primary" variant="tonal" class="p-5 mb-2" >
@@ -107,7 +107,7 @@ const isDialogVisible = ref(false)
 												
 
 											</VCol>
-											<VCol cols="12" md="6" >
+											<VCol cols="12" md="4" >
 												<VCard  flat  border class=" cursor-pointer"  @click="clickButton">
 													<VCardText class="text-center">
 														<VAvatar rounded size="70" color="primary" variant="tonal" class="p-5 mb-2" >
@@ -120,6 +120,24 @@ const isDialogVisible = ref(false)
 
 														<VBtn size="small" variant="tonal"  >
 															abrir gestor
+														</VBtn>
+													</VCardText>
+												</VCard>
+											</VCol>
+
+												<VCol cols="12" md="4" >
+												<VCard  flat  border class=" cursor-pointer"  @click="$router.push({ name: 'apps-mediakit' })">
+													<VCardText class="text-center">
+														<VAvatar rounded size="70" color="primary" variant="tonal" class="p-5 mb-2" >
+															<VIcon icon="mdi-table"  size="45" />
+														</VAvatar>
+														<h6 class="text-h6 my-3">
+															Mediakit
+														</h6>
+														    <!-- Dialog Activator -->
+
+														<VBtn size="small" variant="tonal"  >
+															Panel
 														</VBtn>
 													</VCardText>
 												</VCard>
