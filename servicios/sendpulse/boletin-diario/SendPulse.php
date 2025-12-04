@@ -43,7 +43,7 @@ class SendPulse {
 
 		$this->contadorSolicitudes = 0; //DESFASE DE MINUTOS
 		$this->dataJsonNewsletter = $this->getAttrNewsletter("64f9f5225c4a279b69ff2ac8");
-		$this->apiProtec = "https://www.ecuavisa.com/rss/boletin-diario.json";
+		$this->apiProtec = "https://ecuavisa-tools-newsletter.vercel.app/api/boletin/diario";
 
 		// Crear un objeto DateTime con la fecha actual
 		$fecha = new DateTime();

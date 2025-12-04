@@ -34,49 +34,81 @@ class CtrApi {
 	}
 
 	public function initToken(){
-		date_default_timezone_set('America/Guayaquil');
-    	// Ruta al archivo JSON
-		$rutaArchivo = './token.json';
-		// Leer el contenido del archivo JSON
-		$contenidoJSON = file_get_contents($rutaArchivo);
-		// Decodificar el contenido JSON en un array asociativo
-		$datos = json_decode($contenidoJSON, true);
-		if($this->calcularTiempoTranscurridoEnMinutos($datos["fecha"]) > 30){
-			$curl = curl_init();
-			curl_setopt_array($curl, array(
-			  CURLOPT_URL => 'https://api.sendpulse.com/oauth/access_token',
-			  CURLOPT_RETURNTRANSFER => true,
-			  CURLOPT_ENCODING => '',
-			  CURLOPT_MAXREDIRS => 10,
-			  CURLOPT_TIMEOUT => 0,
-			  CURLOPT_FOLLOWLOCATION => true,
-			  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-			  CURLOPT_CUSTOMREQUEST => 'POST',
-			  CURLOPT_POSTFIELDS =>'{
-			   "grant_type":"client_credentials",
-			   "client_id":"c79f7382012df0ea4c6fa37afec6374e",
-			   "client_secret":"164551af334e1ec93e1b3099afd93a88"
-			}',
-			  CURLOPT_HTTPHEADER => array(
-			    'Content-Type: application/json'
-			  ),
-			));
+		try {
+			$infoData = isset($_GET['info']) ? true: false;
+			date_default_timezone_set('America/Guayaquil');
+			// Ruta al archivo JSON
+			$rutaArchivo = './token.json';
+			// Leer el contenido del archivo JSON
+			$contenidoJSON = file_get_contents($rutaArchivo);
+			// Decodificar el contenido JSON en un array asociativo
+			$datos = json_decode($contenidoJSON, true);
+			if($this->calcularTiempoTranscurridoEnMinutos($datos["fecha"]) > 30){
+				$curl = curl_init();
+				curl_setopt_array($curl, array(
+					CURLOPT_URL => 'https://api.sendpulse.com/oauth/access_token',
+					CURLOPT_RETURNTRANSFER => true,
+					CURLOPT_ENCODING => '',
+					CURLOPT_MAXREDIRS => 10,
+					CURLOPT_TIMEOUT => 15, // 15 segundos timeout
+        			CURLOPT_CONNECTTIMEOUT => 15, // 15 segundos para conexión
+					CURLOPT_FOLLOWLOCATION => true,
+					CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+					CURLOPT_CUSTOMREQUEST => 'POST',
+					CURLOPT_POSTFIELDS =>'{
+						"grant_type":"client_credentials",
+						"client_id":"c79f7382012df0ea4c6fa37afec6374e",
+						"client_secret":"164551af334e1ec93e1b3099afd93a88"
+					}',
+					CURLOPT_HTTPHEADER => array(
+						'Content-Type: application/json'
+					),
+				));
 
-			$response = curl_exec($curl);
+				$response = curl_exec($curl);
+				$error = curl_error($curl);
+				$httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+				curl_close($curl);
+				
+				if ($error) {
+					throw new Exception("Timeout o error en endpoint después de 15 segundos: " . $error);
+				}
+				
+				if ($httpCode != 200) {
+					throw new Exception("Error en endpoint - Status: " . $httpCode);
+				}
 
-			curl_close($curl);
+				$newFile = array(
+					"fecha" => date('Y-m-d H:i:s', time()),
+					"token" => json_decode($response)->access_token
+				);
+				file_put_contents($rutaArchivo, json_encode($newFile));
 
-			$newFile = array(
-				"fecha" => date('Y-m-d H:i:s', time()),
-				"token" => json_decode($response)->access_token
-			);
-			file_put_contents($rutaArchivo, json_encode($newFile));
+				if($infoData){
+					echo json_encode([
+						"resp" => true,
+						"data" => $newFile
+					]);
+					exit();
+				}
 
-			return json_decode($response)->access_token;
+				return json_decode($response)->access_token;
+			}
+
+			if($infoData){
+				echo json_encode([
+					"resp" => true,
+					"data" => $datos
+				]);
+				exit();
+			}
+			return $datos["token"];
+		} catch (\Throwable $th) {
+			return json_encode([
+				"resp" => false,
+				"mensaje" => $th->getMessage()
+			]);
 		}
-
-		return $datos["token"];
-        
     }
 
     public function getToken(){
