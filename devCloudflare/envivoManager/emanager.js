@@ -1411,6 +1411,9 @@ function horarioSorteo2026() {
 function modificarBotones() {
   const btnTelcomunidad = document.getElementById('btnTelcomunidad');
   btnTelcomunidad.style.display = 'block';
+
+  const btngye = document.querySelector('#btnTelcomunidad .btn-gye');
+  btngye.style.display = 'none';
   
   // Modificar el segundo enlace
   const btnQuito = document.querySelector('#btnTelcomunidad .btn-quito');
