@@ -1424,7 +1424,7 @@ function modificarBotones() {
 setTimeout(() => {
   // Ejecutar la función
   if (window.location.pathname === '/envivo'){
-    modificarBotones();
+    // modificarBotones();
   }
 }, 700);
 
@@ -1432,7 +1432,7 @@ setTimeout(() => {
 if (window.location.pathname === '/sorteo-mundial-fifa-2026-grupo-ecuador-en-vivo') {
   // Ejecutar la función inmediatamente
   setTimeout(() => {
-    horarioSorteo2026();
+    // horarioSorteo2026();
   }, 500);
 
 }
