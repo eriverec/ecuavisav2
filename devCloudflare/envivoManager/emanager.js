@@ -1424,7 +1424,7 @@ function modificarBotones() {
 setTimeout(() => {
   // Ejecutar la función
   if (window.location.pathname === '/envivo'){
-    // modificarBotones();
+    modificarBotones();
   }
 }, 700);
 
