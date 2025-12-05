@@ -80,7 +80,7 @@ const buscarResultados = async () => {
   try {
     const { busqueda, selector, path } = props.filtros
     const response = await fetch(
-      `${dominio_prod.value}/tools/newsletter/api/search?busqueda=${encodeURIComponent(busqueda)}&selector=${encodeURIComponent(selector)}&path=${encodeURIComponent(path)}`,
+      `${dominio_prod.value}/api/tools-newsletter/search?busqueda=${encodeURIComponent(busqueda)}&selector=${encodeURIComponent(selector)}&path=${encodeURIComponent(path)}`,
       {
         method: 'GET',
         headers: {
