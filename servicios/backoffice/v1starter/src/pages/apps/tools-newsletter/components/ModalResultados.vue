@@ -131,7 +131,7 @@ const buscarResultados = async () => {
 // Obtener paths
 const getPaths = async (paths) => {
   try {
-    const response = await fetch(`${dominio_prod.value}/tools/newsletter/api/search`, {
+    const response = await fetch(`${dominio_prod.value}/api/tools-newsletter/search`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
