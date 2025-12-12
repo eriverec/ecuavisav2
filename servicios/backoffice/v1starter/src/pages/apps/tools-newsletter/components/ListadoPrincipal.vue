@@ -128,29 +128,34 @@ const handleImageError = (event) => {
       <div class="d-flex justify-space-between align-end mb-2">
         <div class="text-caption text-grey">
           <template v-if="ultimoCambio">
-            <VIcon icon="tabler-info-circle" size="14" class="me-1" />
-            Último cambio no guardado:
-            <VBtn
-              variant="text"
-              size="x-small"
-              @click="handleGuardarTodo"
-              :loading="loadingGeneral"
-              :disabled="loadingGeneral"
-              class="px-1"
+            <VAlert
+              variant="tonal"
+              color="warning"
             >
-              <template v-if="!loadingGeneral">
-                ¿Guardar ahora?
-              </template>
-              <template v-else>
-                <VProgressCircular
-                  indeterminate
-                  size="16"
-                  width="2"
-                  class="me-1"
-                />
-                Guardando...
-              </template>
-            </VBtn>
+              <VIcon icon="tabler-info-circle" size="20" class="me-1" />
+                Último cambio no guardado:
+                <VBtn
+                  variant="text"
+                  size="x-small"
+                  @click="handleGuardarTodo"
+                  :loading="loadingGeneral"
+                  :disabled="loadingGeneral"
+                  class="px-1"
+                >
+                  <template v-if="!loadingGeneral">
+                    ¿Guardar ahora?
+                  </template>
+                  <template v-else>
+                    <VProgressCircular
+                      indeterminate
+                      size="16"
+                      width="2"
+                      class="me-1"
+                    />
+                    Guardando...
+                  </template>
+                </VBtn>
+            </VAlert>
           </template>
           
           <template v-else-if="fechaUltimaModificacion">

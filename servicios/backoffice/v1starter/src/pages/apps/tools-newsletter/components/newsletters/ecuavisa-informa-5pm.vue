@@ -71,8 +71,9 @@ const getItemsServer = async (newsletter = "") => {
 
 // Manejar guardado de items
 
-const handleGuardarItems = async (items) => {
+const handleGuardarItems = async (items, json = {}) => {
   loadingGeneral.value = true
+  const { showModal =  true } = json;
   
   try {
     // Simular llamada a API
@@ -115,7 +116,9 @@ const handleGuardarItems = async (items) => {
 		throw new Error('No se pudieron guardar los items. Intente nuevamente.');
 	}
     
-    mostrarExito('¡Éxito!', `Se guardaron ${items.length} items correctamente`)
+    if(showModal){
+		mostrarExito('¡Éxito!', `Se guardaron ${items.length} items correctamente`)
+	}
     
     // Opcional: hacer algo con los items guardados
     // itemsIniciales.value = items // Actualizar items iniciales

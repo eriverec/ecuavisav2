@@ -7,14 +7,17 @@ const route = useRoute();
 </script>
 
 <template>
-	<div class="d-flex gap-4">
-		<!-- Tabs como navegación -->
-		<NewsletterTabs :active-index="0" />
-
-		<!-- Contenido principal -->
-		<div class="content">
-			<!-- Componente para newsletter de las 7am -->
+	<VRow>
+		<VCol cols="12" md="3">
+			<!-- Tabs como navegación -->
+			<NewsletterTabs :active-index="0" />
+		</VCol>
+		<VCol cols="12" md="9">
+			<!-- Contenido principal -->
+			<div class="content">
+				<!-- Componente para newsletter de las 7am -->
 			<newsletter_7_am />
-		</div>
-	</div>
+			</div>
+		</VCol>
+	</VRow>
 </template>

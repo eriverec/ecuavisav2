@@ -127,7 +127,11 @@ const handleSeleccionarItem = (item) => {
 			orden: itemsSeleccionados.value.length + 1,
 		};
 		itemsSeleccionados.value = [...itemsSeleccionados.value, nuevoItem];
-		ultimoCambio.value = true;
+		// ultimoCambio.value = true;
+
+		handleGuardarTodo({
+			showModal:false
+		});
 	} else {
 		// Aquí podrías usar el AlertDialog para mostrar el mensaje
 		alert("Este item ya está seleccionado");
@@ -142,7 +146,11 @@ const handleEliminarItem = (link) => {
 			...item,
 			orden: idx + 1,
 		}));
-	ultimoCambio.value = true;
+	// ultimoCambio.value = true;
+
+	handleGuardarTodo({
+		showModal:false
+	});
 };
 
 // Manejar vaciar todo
@@ -151,7 +159,7 @@ const handleVaciarTodo = () => {
 	const confirmar = window.confirm("¿Está seguro de vaciar todo?");
 	if (confirmar) {
 		itemsSeleccionados.value = [];
-		props.onGuardarItems([]);
+		props.onGuardarItems([], {});
 		ultimoCambio.value = true;
 		emit("guardar", []);
 		return true;
@@ -169,13 +177,13 @@ const handleOrdenarItems = (items) => {
 };
 
 // Manejar guardado final
-const handleGuardarTodo = () => {
+const handleGuardarTodo = (json = {}) => {
 	if (itemsSeleccionados.value.length === 0) {
 		mostrarError("No hay items para guardar");
 		return;
 	}
 
-	props.onGuardarItems(itemsSeleccionados.value);
+	props.onGuardarItems(itemsSeleccionados.value, json);
 	emit("guardar", itemsSeleccionados.value);
 	ultimoCambio.value = false;
 };

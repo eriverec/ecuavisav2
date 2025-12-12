@@ -45,9 +45,9 @@ const emit = defineEmits(['buscar'])
 const buscar = ref('')
 const itemsTipoBuscar = ref([
   { value: 'por_texto', text: 'Por texto' },
-  { value: 'por_path', text: 'Por path' },
+  { value: 'por_path', text: 'Por url' },
 ])
-const tipoBuscar = ref('por_texto')
+const tipoBuscar = ref('por_path')
 
 // Método para manejar la búsqueda
 const handleBuscar = () => {
@@ -86,13 +86,13 @@ const handleKeyPress = (event) => {
             @confirmar="handleConfirmar"
             @cancelar="handleCancelar"
         />
-      <label for="buscar">Búsqueda</label>
+      <label for="buscar">{{ (tipoBuscar === 'por_texto' ? 'Buscar por el titular de la nota' : 'Buscar por la URL') }}</label>
       <div class="d-flex gap-1 align-center my-1 mb-3">
         <VTextField
           class="rounded-0"
           id="buscar"
           v-model="buscar"
-          placeholder="Buscar notas..."
+          :placeholder="tipoBuscar === 'por_texto' ? 'Ingrese el titular del artículo' : 'Ponga la URL que desea buscar'"
           @keypress="handleKeyPress"
         />
         <div class="tipoBuscar">

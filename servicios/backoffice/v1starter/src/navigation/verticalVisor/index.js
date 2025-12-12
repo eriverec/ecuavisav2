@@ -44,7 +44,8 @@ export default [
       icon: { icon: 'tabler-mail' },
       children: [
         { title: 'Editar Newsletter', to: 'apps-mailing-tabs-edit' },
-        { title: 'Alertas de newsletters', to: 'apps-mailing-list-logs' }
+        { title: 'Alertas de newsletters', to: 'apps-mailing-list-logs' },
+        { title: 'Asignación de notas', to: 'apps-tools-newsletter' }
       ],
     },
   
