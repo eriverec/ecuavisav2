@@ -2,7 +2,7 @@
 import SeleccionadorManager from "../SeleccionadorManager.vue";
 import AlertDialog from "../alert.vue";
 
-const dominio_prod = ref('https://dev.d25bogixxt74yq.amplifyapp.com');
+const dominio_prod = ref('https://jsonhtml-ecuavisa.vercel.app');
 // Nombre del newsletter
 const newsletter = ref("opinion");
 const newsletterTitle = ref("Código Rojas");

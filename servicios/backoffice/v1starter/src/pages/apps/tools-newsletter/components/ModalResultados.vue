@@ -36,7 +36,7 @@ const mostrarModal = computed({
 })
 
 // Dominio ecuavisa
-const dominio_prod = ref('https://dev.d25bogixxt74yq.amplifyapp.com');
+const dominio_prod = ref('https://jsonhtml-ecuavisa.vercel.app');
 
 const resultados = ref([])
 const itemSeleccionadoGroupList = ref([])
@@ -80,7 +80,7 @@ const buscarResultados = async () => {
   try {
     const { busqueda, selector, path } = props.filtros
     const response = await fetch(
-      `${dominio_prod.value}/api/tools-newsletter/search?busqueda=${encodeURIComponent(busqueda)}&selector=${encodeURIComponent(selector)}&path=${encodeURIComponent(path)}`,
+      `${dominio_prod.value}/tools-newsletter?busqueda=${encodeURIComponent(busqueda)}&selector=${encodeURIComponent(selector)}&path=${encodeURIComponent(path)}`,
       {
         method: 'GET',
         headers: {
@@ -131,7 +131,7 @@ const buscarResultados = async () => {
 // Obtener paths
 const getPaths = async (paths) => {
   try {
-    const response = await fetch(`${dominio_prod.value}/api/tools-newsletter/search`, {
+    const response = await fetch(`${dominio_prod.value}/tools-newsletter`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
