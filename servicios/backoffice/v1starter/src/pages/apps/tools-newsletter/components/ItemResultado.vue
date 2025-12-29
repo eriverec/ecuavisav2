@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from "vue";
 
-const dominio_prod = ref('https://beta.ecuavisa.com');
+const dominio_prod = ref('https://www.ecuavisa.com');
 
 // Props con TypeScript-like definitions
 const props = defineProps({
