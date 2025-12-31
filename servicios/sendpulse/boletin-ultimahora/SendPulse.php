@@ -49,7 +49,9 @@ class SendPulse
 
 		$this->contadorSolicitudes = 0; //DESFASE DE MINUTOS
 		$this->dataJsonNewsletter = $this->getAttrNewsletter("66146103d6d9f2e80323e95e"); //id del registro del mongo
-		$this->apiProtec = "https://www.ecuavisa.com/rss/boletin-ultima-hora.json";
+		//$this->apiProtec = "https://www.ecuavisa.com/rss/boletin-ultima-hora.json";
+		//$this->apiProtec = "https://ecuavisa-tools-newsletter.vercel.app/api/boletin/ultima-hora";
+		$this->apiProtec = "https://micuenta.ecuavisa.com/servicio-php-newsletter-cms-react/newsletter/get.php?newsletter=boletin-ultimahora";
 
 		// Crear un objeto DateTime con la fecha actual
 		$fecha = new DateTime();
@@ -550,10 +552,34 @@ class SendPulse
 				if (isset($channel->item)) {
 					if (is_array($channel->item)) {
 						foreach ($channel->item as $key => $value) {
-							$noticias[] = $this->getNoticiaT($value)[0];
+							// Validar que existan los campos requeridos de la nueva API
+							if (!isset($value->articleid)) {
+								echo json_encode(["resp" => false, "mensaje" => "Error - Campo 'articleid' no encontrado en item del newsletter"]);
+								exit();
+							}
+							if (!isset($value->link)) {
+								echo json_encode(["resp" => false, "mensaje" => "Error - Campo 'link' no encontrado en item del newsletter"]);
+								exit();
+							}
+							
+							$noticia = $this->getNoticiaT($value)[0];
+							$noticia['articleid'] = $value->articleid;
+							$noticias[] = $noticia;
 						}
 					} else {
-						$noticias[] = $this->getNoticiaT($channel->item)[0];
+						// Validar campos requeridos para item único
+						if (!isset($channel->item->articleid)) {
+							echo json_encode(["resp" => false, "mensaje" => "Error - Campo 'articleid' no encontrado en item del newsletter"]);
+							exit();
+						}
+						if (!isset($channel->item->link)) {
+							echo json_encode(["resp" => false, "mensaje" => "Error - Campo 'link' no encontrado en item del newsletter"]);
+							exit();
+						}
+						
+						$noticia = $this->getNoticiaT($channel->item)[0];
+						$noticia['articleid'] = $channel->item->articleid;
+						$noticias[] = $noticia;
 					}
 
 					$firstArray = array_slice($noticias, 0, 1);
@@ -1006,7 +1032,7 @@ class SendPulse
 
 	public function getArticle($idarticle)
 	{
-		$json = $this->getApiMethodGet("https://www.ecuavisa.com/news-portlet/getArticle/$idarticle.json");
+		$json = $this->getApiMethodGet("https://jsonhtml-ecuavisa.vercel.app/json/getArticle/$idarticle");
 		return json_decode($json);
 	}
 
@@ -1025,14 +1051,14 @@ class SendPulse
 		return '<table cellpadding="0" border="0" cellspacing="0" class="sp-button flat auto-width" style="border-collapse:collapse; font-size:14px; line-height:1.2; border:0; width:auto !important; border-radius:2px; box-shadow:none; background:'.$getColor.'" width="auto !important"><tbody><tr style="border-color:transparent"><td class="sp-button-text" style=" border-collapse:collapse; border-color:transparent; border-width:0; border-style:none; border:0; padding:0; align:center; border-radius:5px; width:auto; height:40px; vertical-align:middle; text-align:center" width="auto" height="40" valign="middle" align="center"><table cellpadding="0" border="0" cellspacing="0" width="100%" style="border-collapse:collapse; font-size:14px; line-height:1.2; border:0"><tbody><tr style="border-color:transparent"><td align="center" style="border-collapse:collapse; border-color:transparent; border:0; padding:0; line-height:1"><a style="text-decoration:none; color:#FFF; display:block; padding:12px 18px; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-family-short:lucida; font-size:16px; font-weight:bold" href="' . ($link == "" ? "https://www.ecuavisa.com/noticias/?utm_source=SendPulse&amp;utm_medium=SeccionPolitica&amp;utm_campaign=N_CodigoRojas&amp;utm_id=Newsletter" : $link) . '">Seguir leyendo</a></td></tr></tbody></table></td></tr></tbody></table>';
 	}
 
-	private function capturarURLDinamica($list){
-		$urlRedireccionNota = "#";
-		foreach ($list as $key => $value) {
-			if ($value->name == "URL" && isset($value->__text)) {
-				$urlRedireccionNota = $value->__text;
-			}
+	private function capturarURLDinamica($notaLink){
+		// Usar directamente el link de la nota desde el newsletter (nueva API)
+		if (!$notaLink) {
+			echo json_encode(["resp" => false, "mensaje" => "Error - No se encontró la URL del artículo en el newsletter"]);
+			exit();
 		}
-		return 'https://www.'.$urlRedireccionNota.'?utm_source=SendPulse&utm_medium=NotaPrincipal&utm_campaign=N_Ultimahora&utm_id=Newsletter';
+		
+		return $notaLink . (strpos($notaLink, '?') !== false ? '&' : '?') . 'utm_source=SendPulse&utm_medium=NotaPrincipal&utm_campaign=N_Ultimahora&utm_id=Newsletter';
 	}
 
 	private function getDetallesNotaPrincial($list, $getNota, $idarticle)
@@ -1051,11 +1077,19 @@ class SendPulse
 	    }*/
 		
 		// echo count($bloque3);
+		$countTextUltimaHora = 0;
+		$maxParrafosUltimaHora = 2;
 		$getOpinionesBloquesURLVar = $this->getOpinionesBloquesURL($list);
 		if (is_array($list)) {
 
 			$count = 0;
-	    	$urlLinkDinamico = $this->capturarURLDinamica($list);
+			// Obtener la URL de la nota desde el newsletter (nueva API)
+			if (!isset($getFristNota['link'])) {
+				echo json_encode(["resp" => false, "mensaje" => "Error - No se encontró el campo 'link' en los datos del newsletter"]);
+				exit();
+			}
+			$notaLink = $getFristNota['link'];
+	    	$urlLinkDinamico = $this->capturarURLDinamica($notaLink);
 	
 			foreach ($list as $key => $value) {
 
@@ -1071,7 +1105,7 @@ class SendPulse
 					$count++;
 				}*/
 
-				if ($value->name == "Text") {
+				if ($value->name == "Text" && $countTextUltimaHora < $maxParrafosUltimaHora) {
 					$content[] = '
                     <table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;font-family: Lucida Grande,Lucida Sans Unicode,Lucida Sans,Geneva,Verdana,sans-serif;font-weight: 400;" border="0" width="100%">
 			        	<tr>
@@ -1080,6 +1114,7 @@ class SendPulse
 			        		<td>
 			        	<tr>
 			        </table>';
+					$countTextUltimaHora ++;
 				}
 
 				if ($value->name == "Headline") {
@@ -1096,7 +1131,7 @@ class SendPulse
 								</table>';
 				}
 
-				if ($value->name == "Image") {
+				if ($value->name == "Image" && $countTextUltimaHora < $maxParrafosUltimaHora) {
 					$content[] = '
 
 						<table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;" border="0" width="100%">
@@ -1111,6 +1146,7 @@ class SendPulse
 						</table>
                     
                     ';
+					$countTextUltimaHora ++;
 				}
 
 				/*if ($count < 2 && isset($value->name) && $value->name === 'Image_Text') {
@@ -1131,9 +1167,6 @@ class SendPulse
 				        	<tr>
 			        	</table>';
 				}*/
-
-		
-
 		
 				// if ($value->name == "h2" || $value->name == "H2") {
 				// 	$content[] = '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;font-family: Lucida Grande,Lucida Sans Unicode,Lucida Sans,Geneva,Verdana,sans-serif;" border="0" width="100%">
@@ -1182,6 +1215,7 @@ class SendPulse
 				// 		}
 				// 	}
 				// }
+
 			}
 
 			$content[] = $getOpinionesBloquesURLVar;
@@ -1234,17 +1268,13 @@ class SendPulse
 		return	$arr;
 	}
 
-
-
 	public function getNotaPrincipalHTML($idarticle, $getFristNota)
 	{
 		$value = $this->getArticle($idarticle);
 		$newLista = $this->ordenarElementoPorNombre($value->article->content->component, 'Headline', 0);
 		$newLista = $this->ordenarElementoPorNombre($newLista, 'Text', 1); // Asegurarse de que Text esté después de Headline
-    $newLista = $this->ordenarElementoPorNombre($newLista, 'Image', 2); // Asegurarse de que Image esté después de Text
+    	$newLista = $this->ordenarElementoPorNombre($newLista, 'Image', 2); // Asegurarse de que Image esté después de Text
 		$data = $this->getDetallesNotaPrincial($newLista, $getFristNota, $idarticle);
-
-
 		return $data;
 	}
 
@@ -1275,13 +1305,14 @@ class SendPulse
 		$htmlTemplate = $this->ctrFunciones->base64ToHTML($template->body);
 
 
-		$lastSegment = (explode("/", $notas[0][0]["link"])); // Obtener el último segmento
-		$textoSinParametros = explode("?", end($lastSegment));
-		$ecSegment = explode("-", $textoSinParametros[0]);
-		$numbersOnly = preg_replace("/[^0-9]/", "", end($ecSegment)); // Obtener id de la nota capturada por la api de opinión
-
-
-		$articulo = $this->getNotaPrincipalHTML($numbersOnly, $notas)[0];
+		// Usar el articleid completo de la nueva API
+		if (!isset($notas[0][0]['articleid'])) {
+			echo json_encode(["resp" => false, "mensaje" => "Error - No se encontró el campo 'articleid' en los datos del newsletter"]);
+			exit();
+		}
+		
+		$articleId = $notas[0][0]['articleid'];
+		$articulo = $this->getNotaPrincipalHTML($articleId, $notas)[0];
 
 		// echo $this->getUltimaSeccion($notas[1]);
 

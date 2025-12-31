@@ -31,6 +31,7 @@ const emit = defineEmits([
 
 // Constantes
 const imagenPorDefecto = 'https://placehold.co/600x400?text=Not\nFound'
+const dominio_prod = 'https://jsonhtml-ecuavisa.vercel.app';
 
 // Computed
 const itemsOrdenados = computed(() => {
@@ -43,7 +44,7 @@ const itemsOrdenados = computed(() => {
 
 // Métodos
 const obtenerImagen = (item) => {
-  return item?.image?.url || imagenPorDefecto
+  return `${dominio_prod}/image?url=${item?.image?.url}` || imagenPorDefecto
 }
 
 const obtenerTitulo = (item) => {
