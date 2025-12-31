@@ -25,6 +25,7 @@ const emit = defineEmits(["seleccionar", "visualizar"]);
 
 // Constantes
 const imagenPorDefecto = "https://placehold.co/600x400?text=Not\nFound";
+const dominio_prod_img = 'https://jsonhtml-ecuavisa.vercel.app';
 
 // Computed properties
 const titulo = computed(() => {
@@ -46,7 +47,7 @@ const categoria = computed(() => {
 });
 
 const imagen = computed(() => {
-	return props.item.image?.url || props.item.imagen || imagenPorDefecto;
+	return `${dominio_prod_img}/image?url=${props.item.image?.url}` || props.item.imagen || imagenPorDefecto;
 });
 
 const imagenAlt = computed(() => {
