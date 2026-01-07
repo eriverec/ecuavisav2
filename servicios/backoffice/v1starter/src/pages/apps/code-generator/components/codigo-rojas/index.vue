@@ -19,7 +19,7 @@ const items = ref([
 
 const htmlComponent = (params = {}) => {
     const {countryStatus, escapedLink, escapedDescription} = params;
-    return `<div class=codigo_rojas_ampliada><table border=0 cellpadding=0 cellspacing=0 width=100%><tr><td align=center><table border=0 cellpadding=0 cellspacing=0 width=100% class=fondo_codigo_rojas><tr><td><hr class=news-rojas-arriba><tr><td><table border=0 cellpadding=0 cellspacing=0 width=100%><tr><td><div class=titulo_codigo_rojas>${countryStatus}</div><a class=link_codigo_rojas href=${escapedLink}>${escapedDescription}</a></table><tr><td><hr class=news-rojas-abajo></table></table></div>`;
+    return `<div class="codigo_rojas_ampliada"><table border="0" cellpadding="0" cellspacing="0" width="100%"><tr><td align="center"><table border="0" cellpadding="0" cellspacing="0" width="100%" class="fondo_codigo_rojas"><tr><td><hr class="news-rojas-arriba"><tr><td><table border="0" cellpadding="0" cellspacing="0" width="100%"><tr><td><div class="titulo_codigo_rojas">${countryStatus}</div><a class="link_codigo_rojas" href="${escapedLink}">${escapedDescription}</a></table><tr><td><hr class="news-rojas-abajo"></table></table></div>`;
 }
 
 // Generar el código HTML
