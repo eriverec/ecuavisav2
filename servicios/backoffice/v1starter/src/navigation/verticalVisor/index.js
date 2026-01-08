@@ -45,7 +45,8 @@ export default [
       children: [
         { title: 'Editar Newsletter', to: 'apps-mailing-tabs-edit' },
         { title: 'Alertas de newsletters', to: 'apps-mailing-list-logs' },
-        { title: 'Asignación de notas', to: 'apps-tools-newsletter' }
+        { title: 'Asignación de notas', to: 'apps-tools-newsletter' },
+        { title: 'Generador de códigos', to: 'apps-code-generator' },
       ],
     },
   
