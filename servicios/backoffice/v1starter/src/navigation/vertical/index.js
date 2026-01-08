@@ -150,7 +150,8 @@ export default [
       { title: 'Editar Newsletter', to: 'apps-mailing-tabs-edit' },
       { title: 'Forzar Newsletter', to: 'apps-mailing-forzado' },
       { title: 'Alertas de newsletters', to: 'apps-mailing-list-logs' },
-      { title: 'Asignación de notas', to: 'apps-tools-newsletter' }
+      { title: 'Asignación de notas', to: 'apps-tools-newsletter' },
+      { title: 'Generador de códigos', to: 'apps-code-generator' },
       // { title: 'Churnrate', to: 'apps-mailing-churnrate' }
 
       // { title: 'Ads Ubicaciones', to: 'apps-miecuavisa-ads-ubicaciones' },

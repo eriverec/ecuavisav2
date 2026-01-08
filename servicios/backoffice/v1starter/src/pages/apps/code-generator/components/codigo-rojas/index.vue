@@ -77,6 +77,11 @@ const generateCode = () => {
 // Copiar al portapapeles usando la API nativa
 const copyToClipboard = async () => {
   try {
+
+    selectAll();
+
+    await new Promise(resolve => setTimeout(resolve, 700));
+
     // Usar la Clipboard API moderna
     await navigator.clipboard.writeText(generatedCode.value)
     
@@ -359,6 +364,7 @@ onMounted(() => {
                 color="info"
                 variant="tonal"
                 @click="selectAll"
+                class="d-none"
               >
                 <VIcon icon="tabler-select-all" size="20" class="me-1" />
                 Seleccionar Todo
@@ -447,6 +453,7 @@ onMounted(() => {
                   size="small"
                   color="info"
                   variant="tonal"
+                  class="d-none"
                   @click="selectAllFromDialog"
                 >
                   <VIcon icon="tabler-select-all" size="20" />
@@ -485,6 +492,7 @@ onMounted(() => {
         <VCardActions class="pa-4">
           <VSpacer />
           <VBtn
+            class="d-none"
             color="primary"
             variant="outlined"
             @click="selectAllFromDialog"
@@ -495,6 +503,7 @@ onMounted(() => {
           </VBtn>
           <VBtn
             color="success"
+            variant="outlined"
             @click="isDialogVisible = false"
           >
             Cerrar
