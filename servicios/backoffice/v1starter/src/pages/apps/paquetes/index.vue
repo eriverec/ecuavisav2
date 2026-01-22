@@ -832,7 +832,7 @@ onMounted(async () => {
 											/>
 										</VCol>
 
-										<VCol cols="4" md="4" class="mdContainer">
+										<VCol cols="4" md="4" class="mdContainer hidden d-none">
 											<VTextField
 												v-model="precioPromocional"
 												label="Precio promocional"
