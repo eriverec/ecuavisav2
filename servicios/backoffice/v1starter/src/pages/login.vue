@@ -11,8 +11,8 @@ import { useGenerateImageVariant } from '@core/composable/useGenerateImageVarian
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
 import { themeConfig } from '@themeConfig'
 import {
-emailValidator,
-requiredValidator,
+  emailValidator,
+  requiredValidator,
 } from '@validators'
 import Moment from 'moment'
 import { extendMoment } from 'moment-range'
@@ -87,9 +87,13 @@ const login = () => {
         fecha: dateNow
                 };		
 			axios.post(`https://servicio-logs.vercel.app/accion`, log);
-    //console.log('logged')
-    // Redirect to `to` query if exist or redirect to index route
-    router.replace(route.query.to ? String(route.query.to) : '/');
+
+      if(userData.data.role == "monetizacion"){
+        router.replace('/apps/suscriptores/usuarios');
+        return;
+      }
+      // Redirect to `to` query if exist or redirect to index route
+      router.replace(route.query.to ? String(route.query.to) : '/');
   }).catch(e => {
     if(e.response){
     const { message: formErrors } = e.response.data;     

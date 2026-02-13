@@ -607,6 +607,7 @@ const roles = [
   {title: "Administrador", value: "administrador"},
   {title: "Redacción", value: "redaccion"},
   {title: "Webmaster", value: "webmaster"},
+  {title: "Monetización", value: "monetizacion"},
   {title: "Visor", value: "visor"},
   {title: "Marketing", value: "marketing"},
   {title: "Audiencias", value: "audiencia"},

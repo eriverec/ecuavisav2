@@ -1,8 +1,8 @@
 <script setup>
+import CaracteristicasC from "@/pages/apps/caracteristicas/index.vue";
+import GruposC from "@/pages/apps/grupos/index.vue";
 import { onMounted } from "vue";
 import { FormWizard, TabContent } from "vue3-form-wizard";
-import GruposC from "@/pages/apps/grupos/index.vue";
-import CaracteristicasC from "@/pages/apps/caracteristicas/index.vue";
 import "vue3-form-wizard/dist/style.css";
 
 const dataPaquetes = ref([]);
@@ -198,6 +198,7 @@ const isDialogActive = ref(false);
 const accionForm = ref("");
 //-----DATOS FORM----
 const nombre = ref("");
+const subtitulo = ref("");
 const codigoInterno = ref("");
 const tipoPago = ref("");
 const precio = ref(0);
@@ -254,6 +255,7 @@ function resolveCaracteristicasItems() {
 
 function resetForm() {
 	nombre.value = "";
+	subtitulo.value = "";
 	codigoInterno.value = "";
 	tipoPago.value = "";
 	precio.value = null;
@@ -367,6 +369,7 @@ async function onEditPaquete(id) {
 	//console.log(paquete);
 	idToEdit.value = paquete._id;
 	nombre.value = paquete.nombre;
+	subtitulo.value = paquete.subtitulo ?? "";
 	codigoInterno.value = paquete.codigoInterno;
 	tipoPago.value = paquete.tipoPago;
 	precio.value = paquete.precio;
@@ -409,6 +412,7 @@ async function onComplete() {
 			const { value:id_vod_catalogo = '' } = vodModel.value ?? {};
 			let jsonEnviar = {
 				nombre: nombre.value,
+				subtitulo: subtitulo.value,
 				codigoInterno: codigoInterno.value,
 				tipoPago: tipoPago.value,
 				precio: precio.value,
@@ -464,6 +468,7 @@ async function onComplete() {
 			let jsonEnviar = {
 				id: idToEdit.value,
 				nombre: nombre.value,
+				subtitulo: subtitulo.value,
 				codigoInterno: codigoInterno.value,
 				tipoPago: tipoPago.value,
 				precio: precio.value,
@@ -687,7 +692,10 @@ onMounted(async () => {
 									<tbody>
 										<tr v-for="item in paginatedPaquetes">
 											<td class="text-medium-emphasis">
-												{{ item.nombre }}
+												<div v-html="item.nombre" />
+												<small>
+													{{ item.subtitulo ?? '' }}
+												</small>
 											</td>
 											<td class="text-medium-emphasis">
 												{{ item.codigoInterno }}
@@ -781,8 +789,11 @@ onMounted(async () => {
 							<VRow class="pb-5">
 								<VCol cols="12">
 									<VRow>
-										<VCol cols="7" md="7">
+										<VCol cols="12" md="6">
 											<VTextField v-model="nombre" label="Nombre" />
+										</VCol>
+										<VCol cols="12" md="6">
+											<VTextField v-model="subtitulo" label="Ingrese un subtítulo para el paquete" />
 										</VCol>
 										<VCol cols="5" md="5">
 											<VTextField
@@ -797,17 +808,24 @@ onMounted(async () => {
 								<VDivider class="my-2" />
 								<VCol cols="12">
 									<VRow>
-										<VCol cols="6" md="6">
+										<VCol cols="12" md="12">
 											<VSelect
 												v-model="tipoPago"
 												label="Tipo de pago"
 												:items="tipoPagoItems"
 											/>
 										</VCol>
-										<VCol cols="6" md="6">
+										<VCol cols="12" md="6">
 											<VTextField
 												v-model="precio"
-												label="Precio"
+												label="Precio normal(Sin IVA)"
+												type="number"
+											/>
+										</VCol>
+										<VCol cols="12" md="6">
+											<VTextField
+												v-model="precioPromocional"
+												label="Precio promocional(Sin IVA)"
 												type="number"
 											/>
 										</VCol>
@@ -816,7 +834,7 @@ onMounted(async () => {
 
 								<VCol cols="12">
 									<VRow class="d-flex flex-wrap">
-										<VCol cols="4" md="4" class="mdContainer">
+										<VCol cols="12" md="6" class="mdContainer">
 											<VSelect
 												v-model="periodicidad"
 												label="Periodicidad"
@@ -824,31 +842,23 @@ onMounted(async () => {
 											/>
 										</VCol>
 
-										<VCol cols="4" md="4" class="mdContainer">
+										<VCol cols="12" md="6" class="mdContainer">
 											<VTextField
 												v-model="ciclosPromocion"
 												label="Ciclos de Promoción"
 												type="number"
 											/>
 										</VCol>
-
-										<VCol cols="4" md="4" class="mdContainer hidden d-none">
-											<VTextField
-												v-model="precioPromocional"
-												label="Precio promocional"
-												type="number"
-											/>
-										</VCol>
 									</VRow>
 								</VCol>
 
-								<VCol cols="12">
+								<VCol cols="12" class="hidden d-none">
 									<VTextField
 										v-model="descripcionPrecios"
 										label="Descripción de precios"
 									/>
 								</VCol>
-								<span class="mt-4">Otras configuraciónes</span>
+								<span class="mt-4">Otras configuraciones</span>
 								<VDivider class="my-2" />
 								<VCol cols="12">
 									<VRow class="mb-4">
