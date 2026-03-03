@@ -341,7 +341,6 @@ import esLocale from "moment/locale/es";
     }
   };
   // FIN DESCARGAR
-
   const selectedPaquete = ref("651c9d012ff9fa09a75e6c16");
   const paquetes = ref([]);
   const loading = ref(true);
