@@ -1,12 +1,12 @@
 <script setup>
   import plantilla_articulos_estilo_principal from '@/views/apps/radar/v2/plantilla_articulos_estilo_principal.vue';
-  import VueApexCharts from 'vue3-apexcharts';
-  import { hexToRgb } from '@layouts/utils';
-  import { useTheme } from 'vuetify';
+import { hexToRgb } from '@layouts/utils';
+import VueApexCharts from 'vue3-apexcharts';
+import { useTheme } from 'vuetify';
 
   import Moment from 'moment';
-  import { extendMoment } from 'moment-range';
-  import esLocale from "moment/locale/es";
+import { extendMoment } from 'moment-range';
+import esLocale from "moment/locale/es";
 
   const moment = extendMoment(Moment);
   moment.locale('es', [esLocale]);

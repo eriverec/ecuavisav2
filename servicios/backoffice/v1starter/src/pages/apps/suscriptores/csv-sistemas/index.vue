@@ -1,9 +1,9 @@
 <script setup>
-  import Moment from 'moment';
-  import { extendMoment } from 'moment-range';
-  import esLocale from "moment/locale/es";
-  import { parseISO } from 'date-fns';
   import axios from 'axios';
+import { parseISO } from 'date-fns';
+import Moment from 'moment';
+import { extendMoment } from 'moment-range';
+import esLocale from "moment/locale/es";
   const moment = extendMoment(Moment);
   moment.locale('es', [esLocale]);
 
@@ -350,7 +350,12 @@
     try {
       const response = await axios.get('https://ecuavisa-suscripciones.vercel.app/paquete/backoffice/display-all');
       if (response.data.resp && Array.isArray(response.data.data)) {
-        paquetes.value = response.data.data;
+        paquetes.value = (response.data.data).map(s => {
+          return {
+            ...s,
+            nombre: s.nombre.replace(/<\/?[^>]+(>|$)/g, ""),
+          }
+        });
       } else {
         console.error('Formato de respuesta inesperado:', response.data);
       }
@@ -388,7 +393,7 @@
           <VCardItem>
             <div class="p-0 d-flex flex-column align-items-start">
               <VCardTitle>
-                Bajar datos de pagos exitosos para <br>eliminatorias sud 2026.
+                Bajar datos de pagos exitosos.
               </VCardTitle>
               <VCardSubtitle>
                 Debes seleccionar la fecha inicial y la fecha final del combo.
